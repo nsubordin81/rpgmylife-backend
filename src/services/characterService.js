@@ -1,11 +1,17 @@
 const Character = require('../models/Character');
 
 exports.getCharacter = async () => {
-  const character = await Character.findOne();
-  if (!character) {
-    throw new Error('No character found');
+  try {
+    const character = await Character.findOne();
+    if (!character) {
+      console.log('No character found in the database');
+      throw new Error('No character found');
+    }
+    return character;
+  } catch (error) {
+    console.error('Error in getCharacter:', error);
+    throw error;
   }
-  return character;
 };
 
 exports.createCharacter = async (characterData) => {
