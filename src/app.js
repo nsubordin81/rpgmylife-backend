@@ -4,6 +4,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 const characterRoutes = require('./routes/characterRoutes');
+const encounterRoutes = require('./routes/encounterRoutes');
+const questRoutes = require('./routes/questRoutes');
 
 const app = express();
 
@@ -16,6 +18,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 app.use('/api/character', characterRoutes);
+app.use('/api/encounters', encounterRoutes);
+app.use('/api/quests', questRoutes);
 
 // Add this debugging middleware after your routes
 app.use((req, res, next) => {
