@@ -1,10 +1,9 @@
 const express = require('express');
-const questController = require('../controllers/questController');
-
 const router = express.Router();
+const questService = require('../services/questService');
 
-router.get('/', questController.getQuests);
-router.post('/', questController.createQuest);
-router.put('/:id/complete', questController.completeQuest);
+router.get('/quests', questService.getQuests);
+router.post('/quests', questService.createQuest);
+// ... other quest routes ...
 
 module.exports = router;

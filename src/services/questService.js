@@ -13,9 +13,15 @@ exports.getQuests = async (req, res) => {
   }
 };
 
-exports.createQuest = async (questData) => {
-  const quest = new Quest(questData);
-  return await quest.save();
+exports.createQuest = async (req, res) => {
+  try {
+    const newQuest = new Quest(req.body);
+    const savedQuest = await newQuest.save();
+    res.status(201).json(savedQuest);
+  } catch (error) {
+    console.error('Error in createQuest:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
 };
 
 exports.completeQuest = async (questId) => {

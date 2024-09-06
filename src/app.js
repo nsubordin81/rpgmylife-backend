@@ -17,9 +17,9 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
-app.use('/api/character', characterRoutes);
-app.use('/api/encounters', encounterRoutes);
-app.use('/api/quests', questRoutes);
+app.use('/api', characterRoutes);
+app.use('/api', encounterRoutes);
+app.use('/api', questRoutes);
 
 // Add this debugging middleware after your routes
 app.use((req, res, next) => {
