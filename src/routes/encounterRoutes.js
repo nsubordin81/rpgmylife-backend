@@ -4,8 +4,8 @@ const encounterService = require('../services/encounterService');
 
 const router = express.Router();
 
-router.get('/encounters', encounterService.getEncounters);
-router.post('/encounters', encounterService.createEncounter);
+router.get('/', encounterService.getEncounters);
+router.post('/', encounterService.createEncounter);
 router.put('/:id/complete', encounterController.completeEncounter);
 
 module.exports = router;

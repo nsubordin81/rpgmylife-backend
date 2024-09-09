@@ -1,16 +1,20 @@
 const Character = require('../models/Character');
 
-exports.getCharacter = async () => {
+exports.getCharacter = async (req, res) => {
+  console.log('getCharacter function called');
   try {
+    console.log('Attempting to find character');
     const character = await Character.findOne();
+    console.log('Character query result:', character);
     if (!character) {
-      console.log('No character found in the database');
-      throw new Error('No character found');
+      console.log('No character found');
+      return res.status(404).json({ message: 'No character found' });
     }
-    return character;
+    console.log('Sending character data');
+    res.json(character);
   } catch (error) {
     console.error('Error in getCharacter:', error);
-    throw error;
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
 
