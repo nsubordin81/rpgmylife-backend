@@ -31,14 +31,26 @@ exports.getEncounters = async (req, res) => {
 
 exports.createEncounter = async (req, res) => {
   try {
-    const newEncounter = new Encounter(req.body);
-    const savedEncounter = await newEncounter.save();
-    res.status(201).json(savedEncounter);
-  } catch (error) {
-    console.error('Error in createEncounter:', error);
-    res.status(500).json({ message: 'Internal server error', error: error.message });
-  }
-};
+    console.log("Request body:", req.body);
+    console.log("Request headers:", req.headers);
+
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ message: 'Request body is empty or undefined' });
+    }
+
+    const { name, description, type } = req.body;
+
+    if (!name || !description || !type) {
+      return res.status(400).json({ 
+        message: 'Missing required fields',
+        missingFields: {
+          name: !name,
+          description: !description,
+          type: !type
+        }
+      });
+    }
+
 
 exports.completeEncounter = async (req, res) => {
   try {

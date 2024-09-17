@@ -21,6 +21,10 @@ app.use('/api/character', characterRoutes);
 app.use('/api/encounters', encounterRoutes);
 app.use('/api/quests', questRoutes);
 
+app.get('/', (req, res) => {
+  res.json({ message: 'RPG My Life API is running' });
+});
+
 // Add this debugging middleware after your routes
 app.use((req, res, next) => {
   console.log(`Received request: ${req.method} ${req.url}`);
