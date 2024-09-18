@@ -21,9 +21,9 @@ exports.getEncounter = async (req, res) => {
   }
 };
 
-
 exports.createEncounter = async (req, res) => {
   try {
+    console.log('Received some data', req.body)
     const encounter = await encounterService.createEncounter(req.body);
     res.status(201).json(encounter);
   } catch (error) {
