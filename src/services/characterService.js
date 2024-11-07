@@ -4,16 +4,11 @@ exports.getCharacter = async (req, res) => {
   console.log('getCharacter function called');
   try {
     console.log('Attempting to find character');
-    const count = await Character.countDocuments();
-    if (count === 0) {
-      console.log('Character collection is empty');
-      return res.status(404).json({ message: 'No characters exist in the database' });
-    }
     const character = await Character.findOne();
     console.log('Character query result:', character);
     if (!character) {
-      console.log('No character found');
-      return res.status(404).json({ message: 'No character found' });
+      console.log('Character collection is empty');
+      return res.status(200).json(null); 
     }
     console.log('Sending character data');
     res.json(character);
@@ -23,10 +18,18 @@ exports.getCharacter = async (req, res) => {
   }
 };
 
-exports.createCharacter = async (characterData) => {
-  const character = new Character(characterData);
-  await character.save();
-  return character;
+exports.createCharacter = async (req, res) => {
+  try {
+  console.log("received character for saving")
+  const character = new Character(req.body);
+  const savedCharacter = await character.save();
+  console.log("character saved successfully")
+  res.status(201).json(savedCharacter);
+  }
+  catch (error){
+    console.error('Error in createCharacter:', error);
+    res.status(500).json({message: 'Internal Sever error', error: error.message})
+  }
 };
 
 exports.updateCharacter = async (userId, updateData) => {
