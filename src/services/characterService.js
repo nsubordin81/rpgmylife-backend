@@ -4,6 +4,11 @@ exports.getCharacter = async (req, res) => {
   console.log('getCharacter function called');
   try {
     console.log('Attempting to find character');
+    const count = await Character.countDocuments();
+    if (count === 0) {
+      console.log('Character collection is empty');
+      return res.status(404).json({ message: 'No characters exist in the database' });
+    }
     const character = await Character.findOne();
     console.log('Character query result:', character);
     if (!character) {
