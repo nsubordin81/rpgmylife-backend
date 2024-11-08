@@ -1,10 +1,10 @@
 const express = require('express');
-const characterService = require('../services/characterService');
+const characterController = require('../controllers/characterController');
 
 const router = express.Router();
 
-router.get('/', characterService.getCharacter);
-router.post('/', characterService.createCharacter);
+router.get('/', characterController.getCharacter);
+router.post('/', characterController.createCharacter);
 // router.put('/character', characterService.updateCharacter);
 
 module.exports = router;

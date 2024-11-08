@@ -26,3 +26,15 @@ exports.completeQuest = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+exports.getQuest = async (req, res) => {
+  try {
+    const quest = await questService.getQuest(req.params.id);
+    if (!quest) {
+      return res.status(404).json({ message: 'Quest not found' });
+    }
+    res.json(quest);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

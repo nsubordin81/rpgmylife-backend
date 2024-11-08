@@ -1,4 +1,5 @@
 const Encounter = require('../models/Encounter');
+const characterService = require('./characterService');
 
 exports.getEncounters = async () => {
   try {
@@ -22,17 +23,34 @@ exports.createEncounter = async (encounterData) => {
   }
 };
 
+
 exports.completeEncounter = async (encounterId) => {
   try {
-    const encounter = await Encounter.findByIdAndUpdate(
-      encounterId,
-      { completed: true },
-      { new: true }
-    );
+    // Find the encounter
+    const encounter = await Encounter.findById(encounterId);
     if (!encounter) {
       throw new Error('Encounter not found');
     }
-    return encounter;
+
+    // Calculate character updates
+    const updateData = {
+      $inc: {  // Using $inc for atomic updates
+        totalExperience: encounter.experienceGained,
+        gold: encounter.goldGained
+      }
+    };
+
+    // Update character through characterService
+    const character = await characterService.updateCharacter(null, updateData);
+
+    // Mark encounter as completed
+    encounter.completed = true;
+    await encounter.save();
+
+    return {
+      encounter,
+      character
+    };
   } catch (error) {
     console.error('Error in completeEncounter service:', error);
     throw error;
