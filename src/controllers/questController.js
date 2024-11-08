@@ -11,6 +11,7 @@ exports.getQuests = async (req, res) => {
 
 exports.createQuest = async (req, res) => {
   try {
+    console.log('Received quest data:', req.body); // Add this logging
     const quest = await questService.createQuest(req.body);
     res.status(201).json(quest);
   } catch (error) {

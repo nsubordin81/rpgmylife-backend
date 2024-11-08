@@ -1,26 +1,23 @@
 const Quest = require('../models/Quest');
 
-exports.getQuests = async (req, res) => {
+exports.getQuests = async () => {
   try {
     const quests = await Quest.find();
-    if (!quests || quests.length === 0) {
-      return res.status(204).send();
-    }
-    res.json(quests);
+    return quests;  // Simply return the quests array (might be empty)
   } catch (error) {
-    console.error('Error in getQuests:', error);
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    console.error('Error in getQuests service:', error);
+    throw error;
   }
 };
 
-exports.createQuest = async (req, res) => {
+exports.createQuest = async (questData) => {
   try {
-    const newQuest = new Quest(req.body);
+    const newQuest = new Quest(questData);
     const savedQuest = await newQuest.save();
-    res.status(201).json(savedQuest);
+    return savedQuest;
   } catch (error) {
-    console.error('Error in createQuest:', error);
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    console.error('Error in createQuest service:', error);
+    throw error;
   }
 };
 
