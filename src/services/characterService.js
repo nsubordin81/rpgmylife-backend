@@ -1,4 +1,5 @@
 const Character = require('../models/Character');
+const levelSystem = require('../utils/gameRules');
 
 exports.getCharacter = async () => {
   try {
@@ -30,35 +31,38 @@ exports.updateCharacter = async (userId, updateData) => {
   try {
     // Check if we're using $inc operator
     if (updateData.$inc) {
-      const character = await Character.findOneAndUpdate(
-        {}, // For now, still updating first character
-        updateData,
-        { 
-          new: true,      // Return updated document
-          runValidators: true  // Run schema validators on update
-        }
-      );
+      const character = await Character.findOne();
       if (!character) {
-        throw new Error('Character not found');
+        throw new Error('Character not found')
       }
-      return character;
-    }
+   // Calculate new total experience
+   const newTotalExp = character.totalExperience + (updateData.$inc.totalExperience || 0);
+      
+   // Calculate new level based on total experience
+   const newLevel = levelSystem.calculateLevel(newTotalExp);
+   
+   // Add level update if it changed
+   if (newLevel !== character.level) {
+     updateData.$set = { 
+       ...updateData.$set, 
+       level: newLevel 
+     };
+   }
 
-    // Handle regular updates (non-incremental)
-    const character = await Character.findOneAndUpdate(
-      {}, 
-      { $set: updateData },  // Use $set for regular updates
-      { 
-        new: true,
-        runValidators: true 
-      }
-    );
-    if (!character) {
-      throw new Error('Character not found');
-    }
-    return character;
-  } catch (error) {
-    console.error('Error in updateCharacter:', error);
-    throw error;
-  }
+   const updatedCharacter = await Character.findOneAndUpdate(
+     {}, 
+     { ...updateData },
+     { 
+       new: true,
+       runValidators: true
+     }
+   );
+   return updatedCharacter;
+ }
+
+ // Handle regular updates...
+} catch (error) {
+ console.error('Error in updateCharacter:', error);
+ throw error;
+}
 };

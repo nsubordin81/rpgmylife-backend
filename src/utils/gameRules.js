@@ -1,7 +1,4 @@
-// Game configuration could be moved to environment variables or a config file
-const gameConfig = {
-    levelFormula: (level) => Math.round(300 * Math.pow(level - 1, 1.3) + 900)
-  };
+const gameConfig = require('../config/gameSettings')
   
   class LevelSystem {
     constructor(formula = gameConfig.levelFormula) {

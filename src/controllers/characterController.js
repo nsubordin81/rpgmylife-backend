@@ -26,3 +26,25 @@ exports.updateCharacter = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+exports.getLevelInfo = async (req, res) => {
+  try {
+    const character = await characterService.getCharacter();
+    if (!character) {
+      return res.status(404).json({ message: 'Character not found' });
+    }
+
+    const currentLevel = character.level;
+    const currentExp = character.totalExperience;
+    const nextLevelExp = levelSystem.getExperienceForNextLevel(currentLevel);
+
+    res.json({
+      currentLevel,
+      currentExp,
+      nextLevelExp,
+      expToNextLevel: nextLevelExp - currentExp
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
