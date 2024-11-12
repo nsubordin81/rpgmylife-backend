@@ -1,4 +1,5 @@
 const characterService = require('../services/characterService');
+const levelSystem = require('../utils/gameRules')
 
 exports.getCharacter = async (req, res) => {
   try {
@@ -45,6 +46,10 @@ exports.getLevelInfo = async (req, res) => {
       expToNextLevel: nextLevelExp - currentExp
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+      console.error('Error getting level info:', error);
+      res.status(500).json({ 
+        message: 'Error getting level info', 
+        error: error.message 
+      });
   }
 };
