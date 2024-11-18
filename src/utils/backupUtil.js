@@ -45,3 +45,51 @@ exports.createBackup = async () => {
     throw error;
   }
 };
+
+exports.restoreBackup = async (filename) => {
+    try {
+      const backupDir = path.join(__dirname, '../../backups');
+      const compressed = await fs.readFile(path.join(backupDir, filename));
+      const data = JSON.parse((await gunzip(compressed)).toString());
+  
+      // Start a session for atomic restore
+      const session = await mongoose.startSession();
+      await session.withTransaction(async () => {
+        // Clear existing data
+        await Promise.all([
+          Character.deleteMany({}, { session }),
+          Quest.deleteMany({}, { session }),
+          Encounter.deleteMany({}, { session })
+        ]);
+  
+        // Restore data if it exists
+        if (data.character) await Character.create([data.character], { session });
+        if (data.quests?.length) await Quest.insertMany(data.quests, { session });
+        if (data.encounters?.length) await Encounter.insertMany(data.encounters, { session });
+      });
+  
+      return {
+        timestamp: data.timestamp,
+        stats: {
+          character: data.character ? 1 : 0,
+          quests: data.quests?.length || 0,
+          encounters: data.encounters?.length || 0
+        }
+      };
+    } catch (error) {
+      console.error('Restore failed:', error);
+      throw error;
+    }
+  };
+  
+  // Add list backups function
+  exports.listBackups = async () => {
+    try {
+      const backupDir = path.join(__dirname, '../../backups');
+      const files = await fs.readdir(backupDir);
+      return files.filter(f => f.endsWith('.gz'));
+    } catch (error) {
+      console.error('Failed to list backups:', error);
+      throw error;
+    }
+  };
