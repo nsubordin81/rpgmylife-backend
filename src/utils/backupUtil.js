@@ -2,6 +2,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const zlib = require('zlib');
 const { promisify } = require('util');
+const mongoose = require('mongoose');
 const gzip = promisify(zlib.gzip);
 const gunzip = promisify(zlib.gunzip);
 
@@ -67,6 +68,8 @@ exports.restoreBackup = async (filename) => {
         if (data.quests?.length) await Quest.insertMany(data.quests, { session });
         if (data.encounters?.length) await Encounter.insertMany(data.encounters, { session });
       });
+
+      await session.endSession();
   
       return {
         timestamp: data.timestamp,
