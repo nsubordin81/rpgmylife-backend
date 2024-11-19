@@ -49,27 +49,22 @@ exports.createBackup = async () => {
 
 exports.restoreBackup = async (filename) => {
     try {
+      // Read and decompress backup
       const backupDir = path.join(__dirname, '../../backups');
       const compressed = await fs.readFile(path.join(backupDir, filename));
       const data = JSON.parse((await gunzip(compressed)).toString());
   
-      // Start a session for atomic restore
-      const session = await mongoose.startSession();
-      await session.withTransaction(async () => {
-        // Clear existing data
-        await Promise.all([
-          Character.deleteMany({}, { session }),
-          Quest.deleteMany({}, { session }),
-          Encounter.deleteMany({}, { session })
-        ]);
+      // Clear existing data
+      await Promise.all([
+        Character.deleteMany({}),
+        Quest.deleteMany({}),
+        Encounter.deleteMany({})
+      ]);
   
-        // Restore data if it exists
-        if (data.character) await Character.create([data.character], { session });
-        if (data.quests?.length) await Quest.insertMany(data.quests, { session });
-        if (data.encounters?.length) await Encounter.insertMany(data.encounters, { session });
-      });
-
-      await session.endSession();
+      // Restore data if it exists
+      if (data.character) await Character.create(data.character);
+      if (data.quests?.length) await Quest.insertMany(data.quests);
+      if (data.encounters?.length) await Encounter.insertMany(data.encounters);
   
       return {
         timestamp: data.timestamp,
