@@ -7,6 +7,9 @@ const characterRoutes = require('./routes/characterRoutes');
 const encounterRoutes = require('./routes/encounterRoutes');
 const questRoutes = require('./routes/questRoutes');
 
+const backupRoutes = require('./routes/backupRoutes');
+const dataManagementRoutes = require('./routes/dataManagementRoutes');
+
 const app = express();
 
 app.use(cors());
@@ -20,6 +23,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use('/api/character', characterRoutes);
 app.use('/api/encounters', encounterRoutes);
 app.use('/api/quests', questRoutes);
+app.use('/api/backup', backupRoutes);
+app.use('/api/data-management', dataManagementRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'RPG My Life API is running' });

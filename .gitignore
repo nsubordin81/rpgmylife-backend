@@ -5,6 +5,7 @@ jspm_packages/
 # Build outputs
 dist/
 build/
+backups/
 
 # Logs
 logs
