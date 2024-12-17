@@ -1,5 +1,5 @@
 const Encounter = require('../models/Encounter');
-const characterService = require('./characterService');
+const characterService = require('./CharacterService');
 
 exports.getEncounters = async () => {
   try {

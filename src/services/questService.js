@@ -21,7 +21,7 @@ exports.createQuest = async (questData) => {
   }
 };
 
-const characterService = require('./characterService');
+const characterService = require('./CharacterService');
 
 exports.completeQuest = async (questId) => {
   try {

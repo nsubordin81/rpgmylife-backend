@@ -1,4 +1,4 @@
-const characterService = require('../services/characterService');
+const characterService = require('../services/CharacterService');
 const levelSystem = require('../utils/gameRules')
 
 exports.getCharacter = async (req, res) => {
