@@ -3,9 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-const characterRoutes = require('./routes/characterRoutes');
-const encounterRoutes = require('./routes/encounterRoutes');
-const questRoutes = require('./routes/questRoutes');
+const encounterRoutes = require('./legacy/encounters/encounterRoutes');
+const questRoutes = require('./legacy/quests/questRoutes');
 
 const backupRoutes = require('./routes/backupRoutes');
 const dataManagementRoutes = require('./routes/dataManagementRoutes');
@@ -20,7 +19,10 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
-app.use('/api/character', characterRoutes);
+// Event-sourced routes
+app.use('/api/v2/character', require('./character/api/characterRoutes'));
+
+// Legacy routes
 app.use('/api/encounters', encounterRoutes);
 app.use('/api/quests', questRoutes);
 app.use('/api/backup', backupRoutes);

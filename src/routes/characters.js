@@ -1,7 +1,7 @@
 // it is cool that express is a module, I think I need to learn moer about that
 const express = require('express');
 const router = express.Router();
-const characterService = require('../services/CharacterService');
+const characterService = require('../character/services/CharacterService');
 
 router.post('/characters', async (req, res) => {
   try {

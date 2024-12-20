@@ -6,14 +6,15 @@
 
 
 const express = require('express');
-const characterController = require('../controllers/characterController');
-
 const router = express.Router();
+const characterController = require('./characterController');
+
 
 // the router knows h .  so these are handlers that are defined in the routes
-router.get('/', characterController.getCharacter);
+router.get('/:id', characterController.getCharacter);
+
 router.post('/', characterController.createCharacter);
-router.post('/gain-experience', characterController.gainExperience);
+router.post('/:id/experience', characterController.gainExperience);
 router.get('/level-info', characterController.getLevelInfo);
 // router.put('/character', characterService.updateCharacter);
 

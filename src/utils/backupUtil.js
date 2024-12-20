@@ -8,8 +8,8 @@ const gunzip = promisify(zlib.gunzip);
 
 // Import your models
 const Character = require('../models/Character');
-const Quest = require('../models/Quest');
-const Encounter = require('../models/Encounter');
+const Quest = require('../legacy/quests/Quest');
+const Encounter = require('../legacy/encounters/Encounter');
 
 exports.createBackup = async () => {
   try {

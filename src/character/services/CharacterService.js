@@ -1,5 +1,5 @@
 const Character = require('../models/Character');
-const levelSystem = require('../utils/gameRules');
+const levelSystem = require('../../utils/gameRules');
 
 exports.getCharacter = async () => {
   try {
@@ -72,7 +72,7 @@ exports.updateCharacter = async (userId, updateData) => {
 
 const Character = require('../domain/Character');
 // don't know why that gets imported because it is never used
-const eventStore = require('../infrastructure/EventStore');
+const eventStore = require('../../shared/eventStore/EventStore');
 
 class CharacterService {
   constructor()

@@ -1,5 +1,5 @@
 const characterService = require('../services/CharacterService');
-const levelSystem = require('../utils/gameRules')
+const levelSystem = require('../../utils/gameRules')
 
 exports.getCharacter = async (req, res) => {
   try {
@@ -10,14 +10,14 @@ exports.getCharacter = async (req, res) => {
   }
 };
 
-exports.createCharacter = async (req, res) => {
-  try {
-    const character = await characterService.createCharacter(req.body);
-    res.status(201).json(character);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+// exports.createCharacter = async (req, res) => {
+//   try {
+//     const character = await characterService.createCharacter(req.body);
+//     res.status(201).json(character);
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// };
 
 exports.updateCharacter = async (req, res) => {
   try {
@@ -55,6 +55,29 @@ exports.getLevelInfo = async (req, res) => {
 };
 
 // event sourcing portion starts here
+exports.createCharacter = async (req, res) => 
+{
+  try
+  {
+
+    const characterData = req.body;
+
+    if (!characterData.name)
+    {
+      return res.status(400).json({error: "you must at least provide a name when creating a character"})
+    }
+
+    const character = await characterService.createCharacter(req.body)
+    res.json(character);
+
+  }
+  catch(error)
+  {
+    res.status(400).json({error: error.message})
+  }
+}
+
+
 exports.gainExperience = async (req, res) => 
 {
   try

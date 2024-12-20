@@ -1,4 +1,4 @@
-const Quest = require('../models/Quest');
+const Quest = require('./Quest');
 
 exports.getQuests = async () => {
   try {
@@ -21,7 +21,7 @@ exports.createQuest = async (questData) => {
   }
 };
 
-const characterService = require('./CharacterService');
+const characterService = require('../../services/CharacterService');
 
 exports.completeQuest = async (questId) => {
   try {

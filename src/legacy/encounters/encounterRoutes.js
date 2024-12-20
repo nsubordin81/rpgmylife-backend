@@ -1,6 +1,6 @@
 const express = require('express');
-const encounterController = require('../controllers/encounterController');
-const encounterService = require('../services/encounterService');
+const encounterController = require('../../controllers/encounterController');
+const encounterService = require('../../services/encounterService');
 
 console.log('encounterController:', encounterController);
 
