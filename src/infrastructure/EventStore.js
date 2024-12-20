@@ -5,9 +5,26 @@ class EventStore {
     const latestVersion = await this.getLatestVersion(event.characterId);
     event.version = latestVersion + 1;
     
-    const newEvent = new CharacterEvent(event);
-    await newEvent.save();
-    return newEvent;
+    const newEvent = new CharacterEvent(
+    {
+      characterId: event.characterId,
+      type: event.type,
+      payload: event.payload,
+      version: event.version
+    });
+
+    try 
+    {
+      await newEvent.save();
+    } catch (error)
+    {
+      if (error.code === 11000) 
+      {
+        // I guess we cknow this can happen we accidentally create a duplicate identifier
+        throw new ConcurrencyError('Event version conflict')
+      }
+    }
+
   }
 
   async getEvents(characterId) {

@@ -1,12 +1,19 @@
 const Aggregate = require('../infrastructure/Aggregate');
 const eventStore = require('../infrastructure/EventStore');
+const levelSystem = require('../../utils/gameRules')
 
 class Character extends Aggregate {
   constructor(id) {
     super(id);
     this.gold = 0;
+    this.totalExperience = 0;
+    this.level = 1;
     // TODO - add the other properties from the character domain object you have
     // ... other properties
+  }
+
+  gainExperience(amount) {
+    this.addEvent('GAINED_EXPERIENCE', { amount });
   }
 
   // ok I feel like I'm grasping somethign here so let me write about it
@@ -24,6 +31,10 @@ class Character extends Aggregate {
         break;
       case 'GAINED_GOLD':
         this.gold += event.payload.amount;
+        break;
+      case 'GAINED_EXPERIENCE':
+        this.totalExperience += event.payload.amount;
+        this.level = levelSystem.calculateLevel(this.totalExperience);
         break;
       // ... other event handlers
     }

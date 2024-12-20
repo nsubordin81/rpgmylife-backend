@@ -13,7 +13,8 @@ const router = express.Router();
 // the router knows h .  so these are handlers that are defined in the routes
 router.get('/', characterController.getCharacter);
 router.post('/', characterController.createCharacter);
-router.get('/level-info', characterController.getLevelInfo)
+router.post('/gain-experience', characterController.gainExperience);
+router.get('/level-info', characterController.getLevelInfo);
 // router.put('/character', characterService.updateCharacter);
 
-// module.exports = router;
+module.exports = router;

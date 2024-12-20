@@ -75,6 +75,28 @@ const Character = require('../domain/Character');
 const eventStore = require('../infrastructure/EventStore');
 
 class CharacterService {
+  constructor()
+  {
+    // ok so that is how we are working with the event store, sharing it as an exported class
+    this.eventStore = eventStore
+  }
+
+  async gainExperience(characterId, amount) {
+
+    // using the characer aggregate object to load the character state by replaying events
+    // ok so notice here what happens, we abstracted all of hte event sourcing behind the aggregate
+    // the api looks pretty n ormal from this angle, you are loading an object, applying the method, 
+    // and then saving the changes. what is really happening in the backgr4ound though is applying all of the 
+    // events in the store related to that character and then creating a new event and then saving it to the event store
+    const character = await Character.load(characterId);
+
+    character.gainExperience(amount);
+
+    await character.save();
+
+    return character;
+  }
+
   async createCharacter(characterData) {
     const character = new Character(characterData.id);
     // looking at the aggregate I know how this is getting used
