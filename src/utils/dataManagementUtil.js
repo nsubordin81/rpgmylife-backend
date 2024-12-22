@@ -1,4 +1,4 @@
-const Character = require('../models/Character');
+const Character = require('../character/domain/Character');
 const Quest = require('../legacy/quests/Quest');
 const Encounter = require('../legacy/encounters/Encounter');
 

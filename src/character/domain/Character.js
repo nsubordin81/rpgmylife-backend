@@ -1,7 +1,7 @@
 const { CHARACTER_EVENTS } = require('../events/characterEvents');
-const Aggregate = require('../infrastructure/Aggregate');
-const eventStore = require('../shared/eventStore/EventStore');
-const levelSystem = require('../utils/gameRules')
+const Aggregate = require('../../shared/eventStore/Aggregate');
+const eventStore = require('../../shared/eventStore/EventStore');
+const levelSystem = require('../../utils/gameRules')
 
 class Character extends Aggregate {
   constructor(id) {

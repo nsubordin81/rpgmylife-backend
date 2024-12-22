@@ -1,5 +1,5 @@
 const Quest = require('./Quest');
-const characterService = require('../../legacy/character/services/CharacterService');
+const characterService = require('../../character/services/CharacterService');
 
 exports.getQuests = async () => {
   try {
