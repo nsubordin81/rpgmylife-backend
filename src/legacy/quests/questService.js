@@ -1,4 +1,5 @@
 const Quest = require('./Quest');
+const characterService = require('../../legacy/character/services/CharacterService');
 
 exports.getQuests = async () => {
   try {
@@ -21,7 +22,6 @@ exports.createQuest = async (questData) => {
   }
 };
 
-const characterService = require('../../services/CharacterService');
 
 exports.completeQuest = async (questId) => {
   try {

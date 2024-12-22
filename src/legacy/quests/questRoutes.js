@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const questController = require('../controllers/questController');
+const questController = require('./questController');
 
 router.get('/', questController.getQuests);
 router.post('/', questController.createQuest);

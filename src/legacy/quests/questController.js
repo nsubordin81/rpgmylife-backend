@@ -1,4 +1,4 @@
-const questService = require('../services/questService');
+const questService = require('./questService');
 
 exports.getQuests = async (req, res) => {
   try {

@@ -1,4 +1,4 @@
-const encounterService = require('../services/encounterService');
+const encounterService = require('./encounterService');
 
 exports.getEncounters = async (req, res) => {
   try {
