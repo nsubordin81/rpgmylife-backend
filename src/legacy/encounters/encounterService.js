@@ -1,4 +1,4 @@
-const Encounter = require('../models/Encounter');
+const Encounter = require('./Encounter');
 const characterService = require('../../legacy/character/services/CharacterService');
 
 exports.getEncounters = async () => {

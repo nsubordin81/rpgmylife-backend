@@ -1,4 +1,4 @@
-const CharacterEvent = require('../../models/CharacterEvent');
+const CharacterEvent = require('./CharacterEvent');
 
 class EventStore {
   async saveEvent(event) {
@@ -16,6 +16,7 @@ class EventStore {
     try 
     {
       await newEvent.save();
+      return newEvent;
     } catch (error)
     {
       if (error.code === 11000) 
