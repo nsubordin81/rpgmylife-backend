@@ -11,11 +11,9 @@ const characterController = require('./characterController');
 
 
 // the router knows h .  so these are handlers that are defined in the routes
-router.get('/:id', characterController.getCharacter);
-
 router.post('/', characterController.createCharacter);
+router.get('/:id', characterController.getCharacter);
 router.post('/:id/experience', characterController.gainExperience);
-router.get('/level-info', characterController.getLevelInfo);
-// router.put('/character', characterService.updateCharacter);
-
-module.exports = router;
+router.post('/:id/gold', characterController.gainGold);
+router.post('/:id/spend', characterController.spendGold);
+router.get('/:id/level-info', characterController.getLevelInfo);

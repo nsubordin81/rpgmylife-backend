@@ -1,3 +1,4 @@
+const { CHARACTER_EVENTS } = require('../events/characterEvents');
 const Aggregate = require('../infrastructure/Aggregate');
 const eventStore = require('../shared/eventStore/EventStore');
 const levelSystem = require('../utils/gameRules')
@@ -5,16 +6,15 @@ const levelSystem = require('../utils/gameRules')
 class Character extends Aggregate {
   constructor(id) {
     super(id);
-    this.gold = 0;
-    this.totalExperience = 0;
+    this.name = '';
+    this.race = '';
+    this.class = '';
     this.level = 1;
-    // TODO - add the other properties from the character domain object you have
-    // ... other properties
+    this.totalExperience = 0;
+    this.gold = 0;
+    this.loot = []
   }
 
-  gainExperience(amount) {
-    this.addEvent('GAINED_EXPERIENCE', { amount });
-  }
 
   // ok I feel like I'm grasping somethign here so let me write about it
   // the aggregate object has the behavior in it to process an event that is sent to it, 
@@ -24,24 +24,59 @@ class Character extends Aggregate {
     super.applyEvent(event);
     
     switch (event.type) {
-      case 'CHARACTER_CREATED':
+      case CHARACTER_EVENTS.CHARACTER_CREATED:
         this.name = event.payload.name;
         this.race = event.payload.race;
         this.class = event.payload.class;
         break;
-      case 'GAINED_GOLD':
+
+      case CHARACTER_EVENTS.GAINED_GOLD:
         this.gold += event.payload.amount;
         break;
-      case 'GAINED_EXPERIENCE':
+
+
+      case CHARACTER_EVENTS.GAINED_EXPERIENCE:
         this.totalExperience += event.payload.amount;
         this.level = levelSystem.calculateLevel(this.totalExperience);
+        if (newLevel !== this.level) {
+          this.addEvent(CHARACTER_EVENTS.LEVEL_CHANGED, {
+            oldLevel: this.level,
+            newLevel: newLevel
+          });
+          this.level = newLevel;
+        }
         break;
-      // ... other event handlers
+
+        case CHARACTER_EVENTS.SPENT_GOLD:
+          this.gold -= event.payload.amount;
+          break;
+        
+        case CHARACTER_EVENTS.ACQUIRED_LOOT:
+          this.loot.push(event.payload.item)
+        
+        case CHARACTER_EVENTS.LEVEL_CHANGED:
+          this.level = event.payload.newLevel
+          break;
     }
   }
 
+  // Events that Character can process
+
+  gainExperience(amount) {
+    this.addEvent(CHARACTER_EVENTS.GAINED_EXPERIENCE, { amount });
+  }
+
   gainGold(amount) {
-    this.addEvent('GAINED_GOLD', { amount });
+    this.addEvent(CHARACTER_EVENTS.GAINED_GOLD, { amount });
+  }
+
+  spendGold(amount) {
+    this.addEvent(CHARACTER_EVENTS.SPENT_GOLD, { amount });
+  }
+
+  acquireLoot(item) {
+    if (!item) throw new Error('Item is required');
+    this.addEvent(CHARACTER_EVENTS.ACQUIRED_LOOT, { item });
   }
 
   // Static method to rebuild character from events
