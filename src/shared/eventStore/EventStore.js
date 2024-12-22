@@ -5,13 +5,7 @@ class EventStore {
     const latestVersion = await this.getLatestVersion(event.characterId);
     event.version = latestVersion + 1;
     
-    const newEvent = new CharacterEvent(
-    {
-      characterId: event.characterId,
-      type: event.type,
-      payload: event.payload,
-      version: event.version
-    });
+    const newEvent = new CharacterEvent(event);
 
     try 
     {
