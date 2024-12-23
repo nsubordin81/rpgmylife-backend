@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const QuestSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -11,4 +11,4 @@ const QuestSchema = new mongoose.Schema({
   completed: { type: Boolean, default: false }
 });
 
-module.exports = mongoose.model('Quest', QuestSchema);
+export const Quest = mongoose.model('Quest', QuestSchema);

@@ -1,13 +1,11 @@
-import {Character} from '../domain/Character'
-import {eventStore} from '../../shared/eventStore/EventStore.js'
-import { CHARACTER_EVENTS } from '../events/characterEvents';
-
+import Character from '../domain/Character.js';
+import { eventStore } from '../../shared/eventStore/EventStore.js';
+import { CHARACTER_EVENTS } from '../events/characterEvents.js';
+import { levelSystem } from '../../utils/gameRules.js'
 
 class CharacterService {
-  constructor()
-  {
-    // ok so that is how we are working with the event store, sharing it as an exported class
-    this.eventStore = eventStore
+  constructor() {
+    this.eventStore = eventStore;
   }
 
   async gainExperience(characterId, amount) {
@@ -19,16 +17,11 @@ class CharacterService {
 
   async createCharacter(characterData) {
     const character = new Character(characterData.id);
-    // looking at the aggregate I know how this is getting used
-    // remember, in the parent class of aggregate we are actually applying the event and versioning it with this call
     character.addEvent(CHARACTER_EVENTS.CHARACTER_CREATED, {
       name: characterData.name,
       race: characterData.race,
       class: characterData.class
     });
-    // ah, so here is where we are saving that event to the character
-    // maybe would be useful at some point to ask why we are going through the whole rigamarole of adding the event, applying it, and then waiting to save the event to the event store until 
-    // after the application has successfully gone through. I know we wouldn't want ot save teh event if it didn't take, but what if the save fails? we've still updated the character's projection
     await character.save();
     return character;
   }
@@ -40,8 +33,7 @@ class CharacterService {
     return character;
   }
 
-  async spendGold(characterId, amount)
-  {
+  async spendGold(characterId, amount) {
     const character = await this.getCharacter(characterId);
     character.spendGold(amount);
     await character.save();

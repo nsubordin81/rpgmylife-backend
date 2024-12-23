@@ -1,4 +1,4 @@
-import characterService from '../services/CharacterService';
+import { characterService } from "../services/CharacterService.js";
 
 class CharacterController {
 

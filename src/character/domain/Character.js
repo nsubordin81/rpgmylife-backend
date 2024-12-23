@@ -1,6 +1,7 @@
-import {Aggregate} from '../../shared/eventStore/Aggregate.js'
-import { CHARACTER_EVENTS, LOOT_TYPES } from '../events/characterEvents';
+import Aggregate from '../../shared/eventStore/Aggregate.js';
+import { CHARACTER_EVENTS, LOOT_TYPES } from '../events/characterEvents.js';
 import { levelSystem } from '../../utils/gameRules.js'
+import { eventStore } from '../../shared/eventStore/EventStore.js';
 
 
 export default class Character extends Aggregate {

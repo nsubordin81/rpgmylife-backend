@@ -1,4 +1,4 @@
-import {CharacterEvent}from './CharacterEvent.js';
+import { CharacterEvent } from './CharacterEvent.js';
 
 
 class EventStore {

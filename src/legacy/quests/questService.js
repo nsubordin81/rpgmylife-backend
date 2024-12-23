@@ -1,5 +1,4 @@
-const Quest = require('./Quest');
-const characterService = require('../../character/services/CharacterService');
+import { Quest } from './Quest.js'
 
 exports.getQuests = async () => {
   try {

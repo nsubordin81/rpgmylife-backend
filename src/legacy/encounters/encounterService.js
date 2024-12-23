@@ -1,58 +1,64 @@
-const Encounter = require('./Encounter');
-const characterService = require('../../character/services/CharacterService');
+import api from './api.js';
+import { LOOT_TYPES } from '../../character/events/characterEvents.js';
+import { updateCharacterExperience, gainGold, acquireLoot} from './characterService.js';
 
-exports.getEncounters = async () => {
+
+export const ENCOUNTER_EVENTS = {
+  ENCOUNTER_CREATED: 'ENCOUNTER_CREATED',
+  ENCOUNTER_COMPLETED: 'ENCOUNTER_COMPLETED',
+  ENCOUNTER_FAILED: 'ENCOUNTER_FAILED'
+};
+
+export const getEncounters = async () => {
   try {
-    const encounters = await Encounter.find();
-    return encounters;
+    const response = await api.get('/encounters');
+    return response.data;
   } catch (error) {
-    console.error('Error in getEncounters service:', error);
+    console.error('Error fetching encounters:', error);
     throw error;
   }
 };
 
-exports.createEncounter = async (encounterData) => {
+export const createEncounter = async (encounterData) => {
   try {
-    console.log("Encounter data received in service:", encounterData);
-    const newEncounter = new Encounter(encounterData);
-    const savedEncounter = await newEncounter.save();
-    return savedEncounter;
+    const response = await api.post('/encounters', {
+      type: ENCOUNTER_EVENTS.ENCOUNTER_CREATED,
+      payload: encounterData
+    });
+    return response.data;
   } catch (error) {
-    console.error('Error in createEncounter service:', error);
+    console.error('Error creating encounter:', error);
     throw error;
   }
 };
 
-
-exports.completeEncounter = async (encounterId) => {
+export const completeEncounter = async (encounterId) => {
   try {
-    // Find the encounter
-    const encounter = await Encounter.findById(encounterId);
-    if (!encounter) {
-      throw new Error('Encounter not found');
-    }
+    // First mark the encounter as completed
+    const response = await api.post(`/encounters/${encounterId}/complete`, {
+      type: ENCOUNTER_EVENTS.ENCOUNTER_COMPLETED
+    });
 
-    // Calculate character updates
-    const updateData = {
-      $inc: {  // Using $inc for atomic updates
-        totalExperience: encounter.experienceGained,
-        gold: encounter.goldGained
-      }
-    };
+    const encounter = response.data;
 
-    // Update character through characterService
-    const character = await characterService.updateCharacter(null, updateData);
+    // Process rewards
+    await Promise.all([
+      // Award experience
+      updateCharacterExperience(encounter.experienceGained),
+      
+      // Award gold
+      gainGold(encounter.goldGained),
+      
+      // Award any loot if present
+      encounter.loot && acquireLoot({
+        type: LOOT_TYPES.ITEM,
+        item: encounter.loot
+      })
+    ]);
 
-    // Mark encounter as completed
-    encounter.completed = true;
-    await encounter.save();
-
-    return {
-      encounter,
-      character
-    };
+    return encounter;
   } catch (error) {
-    console.error('Error in completeEncounter service:', error);
+    console.error('Error completing encounter:', error);
     throw error;
   }
 };

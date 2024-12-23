@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router();
-import {dataManagementController} from '../controllers/dataManagementController';
+import {dataManagementController} from '../controllers/dataManagementController.js'
 
 // Add some basic protection with a confirmation header
 const confirmationMiddleware = (req, res, next) => {

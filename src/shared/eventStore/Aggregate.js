@@ -1,5 +1,5 @@
 // ok so I guess this is just a model that will support the notion fo aggregates in my app
-class Aggregate {
+export default class Aggregate {
     constructor(id) {
       // being a base classs, things we know we will need are a unique identifier, probably a root entity then
       this.id = id;
@@ -41,4 +41,3 @@ class Aggregate {
     }
   }
   
-  module.exports = Aggregate;

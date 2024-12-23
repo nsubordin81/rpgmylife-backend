@@ -1,7 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import {backupController} from '../controllers/backupController';
-const backupController = require('../controllers/backupController');
+import {backupController} from '../controllers/backupController.js';
 
 router.post('/create', backupController.createBackup);
 router.post('/restore/:filename', backupController.restoreBackup);
