@@ -1,7 +1,7 @@
-const Character = require('../domain/Character');
-// don't know why that gets imported because it is never used
-const eventStore = require('../../shared/eventStore/EventStore');
-const { CHARACTER_EVENTS } = require('../events/characterEvents')
+import {Character} from '../domain/Character'
+import {eventStore} from '../../shared/eventStore/EventStore.js'
+import { CHARACTER_EVENTS } from '../events/characterEvents';
+
 
 class CharacterService {
   constructor()
@@ -72,4 +72,4 @@ class CharacterService {
   }
 }
 
-module.exports = new CharacterService();
+export const characterService = new CharacterService();

@@ -1,4 +1,5 @@
-const CharacterEvent = require('./CharacterEvent');
+import {CharacterEvent}from './CharacterEvent.js';
+
 
 class EventStore {
   async saveEvent(event) {
@@ -47,4 +48,4 @@ class EventStore {
   }
 }
 
-module.exports = new EventStore();
+export const eventStore = new EventStore();

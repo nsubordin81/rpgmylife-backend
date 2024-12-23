@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express'
 const encounterController = require('./encounterController');
 
 console.log('encounterController:', encounterController);
@@ -14,4 +14,4 @@ router.get('/test', (req, res) => {
     res.json({ message: 'Encounter routes are working' });
   });
 
-module.exports = router;
+export { router as encounterRoutes };

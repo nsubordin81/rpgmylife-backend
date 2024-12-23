@@ -1,9 +1,9 @@
-const { CHARACTER_EVENTS, LOOT_TYPES } = require('../events/characterEvents');
-const Aggregate = require('../../shared/eventStore/Aggregate');
-const eventStore = require('../../shared/eventStore/EventStore');
-const levelSystem = require('../../utils/gameRules')
+import {Aggregate} from '../../shared/eventStore/Aggregate.js'
+import { CHARACTER_EVENTS, LOOT_TYPES } from '../events/characterEvents';
+import { levelSystem } from '../../utils/gameRules.js'
 
-class Character extends Aggregate {
+
+export default class Character extends Aggregate {
   constructor(id) {
     super(id);
     this.name = '';
@@ -118,5 +118,3 @@ class Character extends Aggregate {
     this.clearChanges();
   }
 }
-
-module.exports = Character;

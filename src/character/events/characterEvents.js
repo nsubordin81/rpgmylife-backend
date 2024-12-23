@@ -1,4 +1,4 @@
-const CHARACTER_EVENTS = {
+export const CHARACTER_EVENTS = {
     CHARACTER_CREATED: 'CHARACTER_CREATED',
     GAINED_EXPERIENCE: 'GAINED_EXPERIENCE',
     GAINED_GOLD: 'GAINED_GOLD',
@@ -8,9 +8,8 @@ const CHARACTER_EVENTS = {
     LEVEL_CHANGED: 'LEVEL_CHANGED'
   };
 
-  const LOOT_TYPES = {
+  export const LOOT_TYPES = {
     ITEM: 'ITEM',
     GOLD: 'GOLD'
   };
   
-  module.exports = { CHARACTER_EVENTS, LOOT_TYPES };

@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express'; 
 const router = express.Router();
-const questController = require('./questController');
+import {questController} from './questController.js'
 
 router.get('/', questController.getQuests);
 router.post('/', questController.createQuest);
@@ -10,4 +10,4 @@ router.get('/:id', questController.getQuest);
 
 // ... other quest routes ...
 
-module.exports = router;
+export { router as questRoutes }

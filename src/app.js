@@ -1,14 +1,3 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
-
-const encounterRoutes = require('./legacy/encounters/encounterRoutes');
-const questRoutes = require('./legacy/quests/questRoutes');
-
-const backupRoutes = require('./routes/backupRoutes');
-const dataManagementRoutes = require('./routes/dataManagementRoutes');
-
 const app = express();
 
 app.use(cors());
@@ -20,7 +9,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 // Event-sourced routes
-app.use('/api/v2/character', require('./character/api/characterRoutes'));
+app.use('/api/v2/character', characterRoutes);
 
 // Legacy routes
 app.use('/api/encounters', encounterRoutes);
@@ -50,4 +39,4 @@ app.listen(PORT, () => {
   console.log(`MongoDB URI: ${process.env.MONGODB_URI}`);
 });
 
-module.exports = app;
+export { app };

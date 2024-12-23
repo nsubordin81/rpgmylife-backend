@@ -4,11 +4,10 @@
 // handling them  and there is probably some instrumentation going on so that node and express can work together for
 // good concurrency as well as supporting the restful request as an incoming http request. 
 
+import express from 'express';
+import { characterController } from './characterController.js';
 
-const express = require('express');
 const router = express.Router();
-const characterController = require('./characterController');
-
 
 // the router knows h .  so these are handlers that are defined in the routes
 router.post('/', characterController.createCharacter);

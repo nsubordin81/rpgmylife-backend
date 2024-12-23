@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express'
 const router = express.Router();
-const dataManagementController = require('../controllers/dataManagementController');
+import {dataManagementController} from '../controllers/dataManagementController';
 
 // Add some basic protection with a confirmation header
 const confirmationMiddleware = (req, res, next) => {
@@ -16,4 +16,4 @@ const confirmationMiddleware = (req, res, next) => {
 router.delete('/all', confirmationMiddleware, dataManagementController.clearAllData);
 router.delete('/:model', confirmationMiddleware, dataManagementController.clearModelData);
 
-module.exports = router;
+export { router as dataManagementRoutes};
