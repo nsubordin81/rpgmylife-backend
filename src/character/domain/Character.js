@@ -1,4 +1,4 @@
-const { CHARACTER_EVENTS } = require('../events/characterEvents');
+const { CHARACTER_EVENTS, LOOT_TYPES } = require('../events/characterEvents');
 const Aggregate = require('../../shared/eventStore/Aggregate');
 const eventStore = require('../../shared/eventStore/EventStore');
 const levelSystem = require('../../utils/gameRules')
@@ -52,7 +52,14 @@ class Character extends Aggregate {
           break;
         
         case CHARACTER_EVENTS.ACQUIRED_LOOT:
-          this.loot.push(event.payload.item)
+          if(event.payload.type == LOOT_TYPES.GOLD)
+          {
+            this.gold += event.payload.amount;
+          } else
+          {
+            this.loot.push(event.payload.item)
+          }
+          break;
         
         case CHARACTER_EVENTS.LEVEL_CHANGED:
           this.level = event.payload.newLevel
@@ -74,9 +81,22 @@ class Character extends Aggregate {
     this.addEvent(CHARACTER_EVENTS.SPENT_GOLD, { amount });
   }
 
-  acquireLoot(item) {
-    if (!item) throw new Error('Item is required');
-    this.addEvent(CHARACTER_EVENTS.ACQUIRED_LOOT, { item });
+  acquireLoot(loot) {
+    if (!loot.type)
+    {
+      throw new Error('Loot type must be provided');
+    }
+    if (loot.type === LOOT_TYPES.GOLD)
+    {
+      if( !loot.amount || loot.amount < 0 ) {
+        throw new Error('Gold amount must exist and be positive');
+      } 
+    } else if (loot.type === LOOT_TYPES.ITEM ) {
+      if (!loot.item) {
+        throw new Error('Item details required');
+      }
+    }
+    this.addEvent(CHARACTER_EVENTS.ACQUIRED_LOOT, { loot });
   }
 
   // Static method to rebuild character from events

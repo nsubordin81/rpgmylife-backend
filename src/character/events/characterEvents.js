@@ -4,7 +4,13 @@ const CHARACTER_EVENTS = {
     GAINED_GOLD: 'GAINED_GOLD',
     SPENT_GOLD: 'SPENT_GOLD',
     ACQUIRED_LOOT: 'ACQUIRED_LOOT',
+    REMOVED_LOOT: 'REMOVED_LOOT',
     LEVEL_CHANGED: 'LEVEL_CHANGED'
   };
+
+  const LOOT_TYPES = {
+    ITEM: 'ITEM',
+    GOLD: 'GOLD'
+  };
   
-  module.exports = { CHARACTER_EVENTS };
+  module.exports = { CHARACTER_EVENTS, LOOT_TYPES };

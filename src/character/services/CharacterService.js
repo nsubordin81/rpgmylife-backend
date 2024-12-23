@@ -60,6 +60,13 @@ class CharacterService {
     };
   }
 
+  async acquireLoot(characterId, loot) {
+    const character = await Character.load(characterId);
+    character.acquireLoot(loot);
+    await character.save();
+    return character;
+  }
+
   async getCharacter(characterId) {
     return Character.load(characterId);
   }

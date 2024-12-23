@@ -110,3 +110,49 @@ exports.spendGold = async (req, res) =>
   }
 
 }
+
+exports.getLevelInfo = async (req, res) => 
+{
+  try
+  {
+    // why is it params and not body for this on? 
+    const { characterId } = req.params;
+    // why is it returning a levelInfo ojbect instead of a character? 
+    const levelInfo = await characterService.getLevelInfo(characterId);
+    res.json(levelInfo)
+  }
+  catch (error) {
+    if (error.name === 'NotFoundError') 
+    {
+      res.status(404).json({ error: 'Character not found' });
+    } else
+    {
+      res.status(500).json({ error: error.message });
+    }
+  }
+}
+
+exports.acquireLoot = async (req, res) => 
+{
+  try
+  {
+    const {characterId, loot } = req.body;
+    if (!loot || !loot.type) {
+      return res.status(400).json({error: 'you must provide a loot item and it must have a type field'});
+    }
+
+    const character = await characterService.acquireLoot(characterId, loot);
+    res.json(character);
+  } catch(error) {
+    if (error.name === 'ConcurrencyError') {
+      res.status(409).json({error: 'two threads stepping on each other trying to update character'});
+    } else if (error.name === 'NotFoundError') {
+      res.status(404).json({error: 'we couldn\'t find your character'} );
+    } else
+    {
+      res.status(400).json({error: error.message });
+    }
+  }
+
+}
+
