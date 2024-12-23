@@ -1,3 +1,16 @@
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import { characterRoutes } from './character/api/characterRoutes.js';
+
+// Legacy routes
+import { encounterRoutes } from './legacy/encounters/encounterRoutes.js';
+import { questRoutes } from './legacy/quests/questRoutes.js';
+import { backupRoutes } from './routes/backupRoutes.js';
+import { dataManagementRoutes } from './routes/dataManagementRoutes.js';
+
+dotenv.config()
 const app = express();
 
 app.use(cors());
