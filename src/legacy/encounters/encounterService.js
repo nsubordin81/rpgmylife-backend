@@ -1,64 +1,92 @@
-import api from './api.js';
-import { LOOT_TYPES } from '../../character/events/characterEvents.js';
-import { updateCharacterExperience, gainGold, acquireLoot} from './characterService.js';
+import { Encounter } from './Encounter.js';
+import { characterService } from '../../character/services/CharacterService.js';
 
-
-export const ENCOUNTER_EVENTS = {
-  ENCOUNTER_CREATED: 'ENCOUNTER_CREATED',
-  ENCOUNTER_COMPLETED: 'ENCOUNTER_COMPLETED',
-  ENCOUNTER_FAILED: 'ENCOUNTER_FAILED'
-};
-
-export const getEncounters = async () => {
-  try {
-    const response = await api.get('/encounters');
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching encounters:', error);
-    throw error;
+class EncounterService {
+  /**
+   * Get all encounters
+   * @returns {Promise<Array<Encounter>>}
+   */
+  async getEncounters() {
+    try {
+      return await Encounter.find({});
+    } catch (error) {
+      console.error('Error fetching encounters:', error);
+      throw error;
+    }
   }
-};
 
-export const createEncounter = async (encounterData) => {
-  try {
-    const response = await api.post('/encounters', {
-      type: ENCOUNTER_EVENTS.ENCOUNTER_CREATED,
-      payload: encounterData
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error creating encounter:', error);
-    throw error;
+  /**
+   * Get encounter by ID
+   * @param {string} encounterId 
+   * @returns {Promise<Encounter>}
+   */
+  async getEncounter(encounterId) {
+    try {
+      const encounter = await Encounter.findById(encounterId);
+      if (!encounter) {
+        const error = new Error('Encounter not found');
+        error.name = 'NotFoundError';
+        throw error;
+      }
+      return encounter;
+    } catch (error) {
+      console.error('Error fetching encounter:', error);
+      throw error;
+    }
   }
-};
 
-export const completeEncounter = async (encounterId) => {
-  try {
-    // First mark the encounter as completed
-    const response = await api.post(`/encounters/${encounterId}/complete`, {
-      type: ENCOUNTER_EVENTS.ENCOUNTER_COMPLETED
-    });
+  /**
+   * Create a new encounter
+   * @param {Object} encounterData 
+   * @returns {Promise<Encounter>}
+   */
+  async createEncounter(encounterData) {
+    try {
+      const encounter = new Encounter(encounterData);
+      await encounter.save();
+      return encounter;
+    } catch (error) {
+      console.error('Error creating encounter:', error);
+      throw error;
+    }
+  }
 
-    const encounter = response.data;
-
-    // Process rewards
-    await Promise.all([
-      // Award experience
-      updateCharacterExperience(encounter.experienceGained),
+  /**
+   * Complete an encounter and process rewards
+   * @param {string} encounterId 
+   * @param {string} characterId
+   * @returns {Promise<Encounter>}
+   */
+  async completeEncounter(encounterId, characterId) {
+    try {
+      const encounter = await this.getEncounter(encounterId);
       
-      // Award gold
-      gainGold(encounter.goldGained),
-      
-      // Award any loot if present
-      encounter.loot && acquireLoot({
-        type: LOOT_TYPES.ITEM,
-        item: encounter.loot
-      })
-    ]);
+      if (encounter.completed) {
+        const error = new Error('Encounter already completed');
+        error.name = 'ValidationError';
+        throw error;
+      }
 
-    return encounter;
-  } catch (error) {
-    console.error('Error completing encounter:', error);
-    throw error;
+      // Process rewards through characterService
+      await Promise.all([
+        characterService.gainExperience(characterId, encounter.experienceGained),
+        characterService.gainGold(characterId, encounter.goldGained),
+        encounter.loot && characterService.acquireLoot(characterId, encounter.loot)
+      ]);
+
+      encounter.completed = true;
+      await encounter.save();
+
+      return encounter;
+    } catch (error) {
+      console.error('Error completing encounter:', error);
+      throw error;
+    }
   }
-};
+}
+
+// Export singleton instance for normal use
+export const encounterService = new EncounterService();
+
+// Export class for testing (enables dependency injection)
+export { EncounterService };

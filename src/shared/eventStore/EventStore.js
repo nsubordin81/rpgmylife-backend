@@ -23,6 +23,13 @@ class EventStore {
 
   }
 
+  async find(criteria) {
+    // Find events matching the given criteria (e.g., { type: 'CHARACTER_CREATED' })
+    return CharacterEvent.find(criteria)
+      .sort({ version: 1 })
+      .lean();
+  }
+
   async getEvents(characterId) {
     // get all events for character in ascending order
     return CharacterEvent.find({ characterId })

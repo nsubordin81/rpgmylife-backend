@@ -1,8 +1,8 @@
-const Character = require('../character/domain/Character');
-const Quest = require('../legacy/quests/Quest');
-const Encounter = require('../legacy/encounters/Encounter');
+import Character from '../character/domain/Character.js';
+import { Quest } from '../legacy/quests/Quest.js';
+import { Encounter } from '../legacy/encounters/Encounter.js';
 
-exports.clearAllData = async () => {
+export const clearAllData = async () => {
   try {
     const results = await Promise.all([
       Character.deleteMany({}),
@@ -23,7 +23,7 @@ exports.clearAllData = async () => {
   }
 };
 
-exports.clearModelData = async (modelName) => {
+export const clearModelData = async (modelName) => {
   try {
     let result;
     switch (modelName.toLowerCase()) {

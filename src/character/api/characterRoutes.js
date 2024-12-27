@@ -5,14 +5,18 @@
 // good concurrency as well as supporting the restful request as an incoming http request. 
 
 import express from 'express';
-import { characterController } from './characterController.js';
+import { createCharacter, getCharacter, gainExperience, gainGold, spendGold, getLevelInfo } from './characterController.js';
 
 const router = express.Router();
 
 // the router knows h .  so these are handlers that are defined in the routes
-router.post('/', characterController.createCharacter);
-router.get('/:id', characterController.getCharacter);
-router.post('/:id/experience', characterController.gainExperience);
-router.post('/:id/gold', characterController.gainGold);
-router.post('/:id/spend', characterController.spendGold);
-router.get('/:id/level-info', characterController.getLevelInfo);
+router.post('/', createCharacter);
+// Get current character (no ID needed)
+router.get('/', getCharacter);
+router.get('/:id', getCharacter);
+router.post('/:id/experience', gainExperience);
+router.post('/:id/gold', gainGold);
+router.post('/:id/spend', spendGold);
+router.get('/:id/level-info', getLevelInfo);
+
+export { router as characterRoutes };

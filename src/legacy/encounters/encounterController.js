@@ -1,6 +1,6 @@
-const encounterService = require('./encounterService');
+import { encounterService } from './encounterService.js';
 
-exports.getEncounters = async (req, res) => {
+export const getEncounters = async (req, res) => {
   try {
     const encounters = await encounterService.getEncounters();
     res.json(encounters);
@@ -9,7 +9,7 @@ exports.getEncounters = async (req, res) => {
   }
 };
 
-exports.getEncounter = async (req, res) => {
+export const getEncounter = async (req, res) => {
   try {
     const encounter = await encounterService.getEncounter(req.params.id);
     if (!encounter) {
@@ -21,7 +21,7 @@ exports.getEncounter = async (req, res) => {
   }
 };
 
-exports.createEncounter = async (req, res) => {
+export const createEncounter = async (req, res) => {
   try {
     console.log('Received some data', req.body)
     const encounter = await encounterService.createEncounter(req.body);
@@ -31,7 +31,7 @@ exports.createEncounter = async (req, res) => {
   }
 };
 
-exports.completeEncounter = async (req, res) => {
+export const completeEncounter = async (req, res) => {
   try {
     const encounter = await encounterService.completeEncounter(req.params.id);
     res.json(encounter);

@@ -1,6 +1,6 @@
-const backupUtil = require('../utils/backupUtil');
+import * as backupUtil from '../utils/backupUtil.js';
 
-exports.createBackup = async (req, res) => {
+export const createBackup = async (req, res) => {
   try {
     const result = await backupUtil.createBackup();
     res.json({
@@ -15,7 +15,7 @@ exports.createBackup = async (req, res) => {
   }
 };
 
-exports.restoreBackup = async (req, res) => {
+export const restoreBackup = async (req, res) => {
   try {
     const { filename } = req.params;
     const result = await backupUtil.restoreBackup(filename);
@@ -31,7 +31,7 @@ exports.restoreBackup = async (req, res) => {
   }
 };
 
-exports.listBackups = async (req, res) => {
+export const listBackups = async (req, res) => {
   try {
     const backups = await backupUtil.listBackups();
     res.json(backups);

@@ -1,6 +1,6 @@
-const dataManagementUtil = require('../utils/dataManagementUtil');
+import * as dataManagementUtil from '../utils/dataManagementUtil.js';
 
-exports.clearAllData = async (req, res) => {
+export const clearAllData = async (req, res) => {
   try {
     const result = await dataManagementUtil.clearAllData();
     res.json({
@@ -15,7 +15,7 @@ exports.clearAllData = async (req, res) => {
   }
 };
 
-exports.clearModelData = async (req, res) => {
+export const clearModelData = async (req, res) => {
   try {
     const { model } = req.params;
     const result = await dataManagementUtil.clearModelData(model);

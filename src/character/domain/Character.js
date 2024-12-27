@@ -15,7 +15,7 @@ export default class Character extends Aggregate {
     this.gold = 0;
     this.loot = []
   }
-
+ 
 
   // ok I feel like I'm grasping somethign here so let me write about it
   // the aggregate object has the behavior in it to process an event that is sent to it, 

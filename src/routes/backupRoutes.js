@@ -1,9 +1,9 @@
 import express from 'express';
 const router = express.Router();
-import {backupController} from '../controllers/backupController.js';
+import { createBackup, restoreBackup, listBackups } from '../controllers/backupController.js';
 
-router.post('/create', backupController.createBackup);
-router.post('/restore/:filename', backupController.restoreBackup);
-router.get('/list', backupController.listBackups);
+router.post('/create', createBackup);
+router.post('/restore/:filename', restoreBackup);
+router.get('/list', listBackups);
 
-export {router as backuRoutes}
+export {router as backupRoutes}

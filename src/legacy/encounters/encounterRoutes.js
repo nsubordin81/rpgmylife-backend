@@ -1,14 +1,12 @@
 import express from 'express'
-const encounterController = require('./encounterController');
-
-console.log('encounterController:', encounterController);
+import { getEncounters, getEncounter, createEncounter, completeEncounter } from './encounterController.js';
 
 const router = express.Router();
 
-router.get('/', encounterController.getEncounters);
-router.post('/', encounterController.createEncounter);
-router.put('/:id/complete', encounterController.completeEncounter);
-router.get('/:id', encounterController.getEncounter);
+router.get('/', getEncounters);
+router.post('/', createEncounter);
+router.put('/:id/complete', completeEncounter);
+router.get('/:id', getEncounter);
 
 router.get('/test', (req, res) => {
     res.json({ message: 'Encounter routes are working' });

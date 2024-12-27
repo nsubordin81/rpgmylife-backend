@@ -62,6 +62,25 @@ class CharacterService {
   async getCharacter(characterId) {
     return Character.load(characterId);
   }
+
+  async getFirstCharacter() {
+    // Get all character events without filtering by characterId
+    const events = await this.eventStore.find({
+      type: CHARACTER_EVENTS.CHARACTER_CREATED
+    });
+    
+    // Get the first creation event
+    const createEvent = events[0];
+    
+    if (!createEvent) {
+      return null;
+    }
+    
+    // Use the characterId from the creation event to load the full character
+    return this.getCharacter(createEvent.characterId);
+  }
 }
 
 export const characterService = new CharacterService();
+// keeping export of the class itself so that we can still inject instance for tests
+export { CharacterService }
