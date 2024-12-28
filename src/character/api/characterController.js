@@ -25,7 +25,9 @@ export const getCharacter = async (req, res) => {
     if (characterId) {
       character = await characterService.getCharacter(characterId);
     } else {
+      console.log('character id not provided, getting first available character')
       character = await characterService.getFirstCharacter();
+      console.log('retrieved character info: ' + character);
     }
 
     if (!character) {
