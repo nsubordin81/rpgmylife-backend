@@ -13,10 +13,10 @@ const router = express.Router();
 router.post('/', createCharacter);
 // Get current character (no ID needed)
 router.get('/', getCharacter);
+router.get('/level-info', getLevelInfo);
 router.get('/:id', getCharacter);
 router.post('/:id/experience', gainExperience);
 router.post('/:id/gold', gainGold);
 router.post('/:id/spend', spendGold);
-router.get('/:id/level-info', getLevelInfo);
 
 export { router as characterRoutes };

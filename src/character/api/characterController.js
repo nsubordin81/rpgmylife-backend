@@ -109,7 +109,7 @@ export const spendGold = async (req, res) => {
 export const getLevelInfo = async (req, res) => {
   try {
     // why is it params and not body for this on? 
-    const { characterId } = req.params;
+    const characterId = req.query.characterId;
     // why is it returning a levelInfo ojbect instead of a character? 
     const levelInfo = await characterService.getLevelInfo(characterId);
     res.json(levelInfo)
