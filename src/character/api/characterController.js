@@ -3,6 +3,7 @@ import { characterService } from "../services/CharacterService.js";
 export const createCharacter = async (req, res) => {
   try {
     const characterData = req.body;
+    console.log('Request body:', req.body);
 
     if (!characterData.name) {
       return res.status(400).json({ error: "you must at least provide a name when creating a character" })
