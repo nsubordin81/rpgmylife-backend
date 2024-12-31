@@ -66,13 +66,21 @@ class EncounterService {
         error.name = 'ValidationError';
         throw error;
       }
+    // Create array of promises, filtering out null operations
+    const rewardPromises = [
+      characterService.gainExperience(characterId, encounter.experienceGained),
+      characterService.gainGold(characterId, encounter.goldGained)
+    ];
 
-      // Process rewards through characterService
-      await Promise.all([
-        characterService.gainExperience(characterId, encounter.experienceGained),
-        characterService.gainGold(characterId, encounter.goldGained),
-        encounter.loot && characterService.acquireLoot(characterId, encounter.loot)
-      ]);
+    // Only add loot promise if loot exists
+  // Only add loot promise if loot exists and has content
+if (encounter.loot && Object.keys(encounter.loot).length > 0) {
+  console.log("Processing loot:", encounter.loot);
+  rewardPromises.push(characterService.acquireLoot(characterId, encounter.loot));
+}
+
+    // Process rewards
+    await Promise.all(rewardPromises);
 
       encounter.completed = true;
       await encounter.save();

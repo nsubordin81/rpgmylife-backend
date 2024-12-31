@@ -65,7 +65,7 @@ export default class Character extends Aggregate {
 
       case CHARACTER_EVENTS.GAINED_EXPERIENCE:
         this.totalExperience += event.payload.amount;
-        this.level = levelSystem.calculateLevel(this.totalExperience);
+        const newLevel = levelSystem.calculateLevel(this.totalExperience);
         if (newLevel !== this.level) {
           this.addEvent(CHARACTER_EVENTS.LEVEL_CHANGED, {
             oldLevel: this.level,
@@ -131,6 +131,7 @@ export default class Character extends Aggregate {
   static async load(characterId) {
     // we know from writing the event store class how this works, go get all of the events in chronological order for this character object
     const events = await eventStore.getEvents(characterId);
+    console.log(`attempting to load character with id ${characterId}`);
     console.log(events.length);
     if (events.length === 0) {
       throw new Error('NotFoundError: Character not found');

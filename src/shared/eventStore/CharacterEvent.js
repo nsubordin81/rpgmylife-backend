@@ -1,7 +1,7 @@
 import { mongoose } from 'mongoose'
 
 const CharacterEventSchema = new mongoose.Schema({
-    characterId: {type: mongoose.Schema.Types.ObjectId, required: true},
+    characterId: {type: String, required: true},
     type: {type: String, required: true },
     payload: { type: mongoose.Schema.Types.Mixed, required: true},
     timestamp: {type: Date, default: Date.now},

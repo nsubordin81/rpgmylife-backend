@@ -33,7 +33,8 @@ export const createEncounter = async (req, res) => {
 
 export const completeEncounter = async (req, res) => {
   try {
-    const encounter = await encounterService.completeEncounter(req.params.id);
+    const { characterId } = req.body;
+    const encounter = await encounterService.completeEncounter(req.params.id, characterId);
     res.json(encounter);
   } catch (error) {
     res.status(404).json({ message: error.message });

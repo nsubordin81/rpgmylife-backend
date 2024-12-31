@@ -7,7 +7,7 @@ export const createCharacter = async (req, res) => {
     if (!characterData.name) {
       return res.status(400).json({ error: "you must at least provide a name when creating a character" })
     }
-    const character = await this.characterService.createCharacter(req.body);
+    const character = await characterService.createCharacter(req.body);
     res.status(201).json(character);
   }
   catch (error) {
