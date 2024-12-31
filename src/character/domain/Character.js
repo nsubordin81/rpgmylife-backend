@@ -2,10 +2,11 @@ import Aggregate from '../../shared/eventStore/Aggregate.js';
 import { CHARACTER_EVENTS, LOOT_TYPES } from '../events/characterEvents.js';
 import { levelSystem } from '../../utils/gameRules.js'
 import { eventStore } from '../../shared/eventStore/EventStore.js';
+import { v4 as uuidv4 } from 'uuid';
 
 
 export default class Character extends Aggregate {
-  constructor(id) {
+  constructor(id= uuidv4()) {
     super(id);
     this.name = '';
     this.race = '';
@@ -15,8 +16,34 @@ export default class Character extends Aggregate {
     this.gold = 0;
     this.loot = []
   }
- 
 
+  static create(characterData)
+  {
+    const id = uuidv4();
+    const character = new Character(id);
+    character.addEvent(CHARACTER_EVENTS.CHARACTER_CREATED, {
+      id,
+      name: characterData.name,
+      race: characterData.race,
+      class: characterData.class
+    });
+    return character
+  }
+
+  toDTO()
+  {
+    return {
+      id: this.id,
+      name: this.name,
+      race: this.race,
+      class: this.class,
+      level: this.level,
+      totalExperience: this.totalExperience,
+      gold: this.gold,
+      loot: this.loot
+    };
+  }
+ 
   // ok I feel like I'm grasping somethign here so let me write about it
   // the aggregate object has the behavior in it to process an event that is sent to it, 
   // but b3elow we see the gainGold event that it also kind of owns the definition of that event

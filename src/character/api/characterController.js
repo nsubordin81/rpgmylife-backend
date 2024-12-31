@@ -2,19 +2,16 @@ import { characterService } from "../services/CharacterService.js";
 
 export const createCharacter = async (req, res) => {
   try {
-    const characterData = req.body;
     console.log('Request body:', req.body);
-
+    const characterData = req.body;
     if (!characterData.name) {
       return res.status(400).json({ error: "you must at least provide a name when creating a character" })
     }
-
-    const character = await characterService.createCharacter(req.body)
-    res.json(character);
-
+    const character = await this.characterService.createCharacter(req.body);
+    res.status(201).json(character);
   }
   catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(500).json({ error: error.message })
   }
 }
 
