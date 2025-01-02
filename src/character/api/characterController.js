@@ -123,10 +123,10 @@ export const getLevelInfo = async (req, res) => {
 export const acquireLoot = async (req, res) => {
   try {
     const { characterId, loot } = req.body;
+    console.log(`characterid: ${characterId}, loot: ${loot}`)
     if (!loot || !loot.type) {
       return res.status(400).json({ error: 'you must provide a loot item and it must have a type field' });
     }
-
     const character = await characterService.acquireLoot(characterId, loot);
     res.json(character);
   } catch (error) {
