@@ -25,7 +25,7 @@ export const getCharacter = async (req, res) => {
     } else {
       console.log('character id not provided, getting first available character')
       character = await characterService.getFirstCharacter();
-      console.log('retrieved character info: ' + character);
+      console.log('retrieved character info:', JSON.stringify(character, null, 2));
     }
 
     if (!character) {
@@ -105,11 +105,10 @@ export const spendGold = async (req, res) => {
 
 export const getLevelInfo = async (req, res) => {
   try {
-    // why is it params and not body for this on? 
-    const characterId = req.query.characterId;
-    // why is it returning a levelInfo ojbect instead of a character? 
+    const characterId = req.params.id;
+    console.log(`Getting level info for character: ${characterId}`);
     const levelInfo = await characterService.getLevelInfo(characterId);
-    res.json(levelInfo)
+    res.json(levelInfo);
   }
   catch (error) {
     if (error.name === 'NotFoundError') {

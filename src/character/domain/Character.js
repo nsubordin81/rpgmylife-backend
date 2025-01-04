@@ -132,7 +132,7 @@ export default class Character extends Aggregate {
     // we know from writing the event store class how this works, go get all of the events in chronological order for this character object
     const events = await eventStore.getEvents(characterId);
     console.log(`attempting to load character with id ${characterId}`);
-    console.log(events.length);
+    console.log(`number of character events for character ${characterId}, ${events.length}`);
     if (events.length === 0) {
       throw new Error('NotFoundError: Character not found');
     }
