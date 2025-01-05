@@ -11,9 +11,9 @@ const router = express.Router();
 
 // the router knows h .  so these are handlers that are defined in the routes
 router.post('/', createCharacter);
-// Get current character (no ID needed)
-router.get('/', getCharacter);
 router.get('/:id/level-info', getLevelInfo);
+// not sure if this is the normal way to do it, exposing two routes, one that doesn't have id, allowing for both in the controller
+router.get('/', getCharacter);
 router.get('/:id', getCharacter);
 router.post('/:id/experience', gainExperience);
 router.post('/:id/gold', gainGold);

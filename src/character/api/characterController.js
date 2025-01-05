@@ -42,7 +42,8 @@ export const getCharacter = async (req, res) => {
 export const gainExperience = async (req, res) => {
   try {
     // you know that you can deconstruct the body this way, contract says those are the payload
-    const { characterId, amount } = req.body;
+    const {characterId } = req.params.id
+    const { amount } = req.body;
 
     if (!amount || amount < 0) {
       return res.status(400).json({ error: 'Invalid Experience Amount' });
@@ -63,7 +64,8 @@ export const gainExperience = async (req, res) => {
 
 export const gainGold = async (req, res) => {
   try {
-    const { characterId, amount } = req.body
+    const { characterId } = req.params.id
+    const { amount } = req.body
 
     if (!amount || amount < 0) {
       return res.status(400).json({ error: 'Invalid Gold Amount' })
@@ -84,7 +86,8 @@ export const gainGold = async (req, res) => {
 
 export const spendGold = async (req, res) => {
   try {
-    const { characterId, amount } = req.body;
+    const { characterId } = req.params.id;
+    const { amount } = req.body;
 
     if (!amount || amount < 0) {
       return res.status(400).json({ error: 'Invalid Gold Amount' })
