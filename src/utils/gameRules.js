@@ -1,6 +1,6 @@
-const gameConfig = require('../config/gameSettings')
+import { gameConfig } from '../config/gameSettings.js'
   
-  class LevelSystem {
+class LevelSystem {
     constructor(formula = gameConfig.levelFormula) {
       this.experienceFormula = formula;
       this.experienceTable = this.generateExperienceTable();
@@ -33,6 +33,4 @@ const gameConfig = require('../config/gameSettings')
   }
   
   // Create singleton instance
-  const levelSystem = new LevelSystem();
-  
-  module.exports = levelSystem;
+  export const levelSystem = new LevelSystem();

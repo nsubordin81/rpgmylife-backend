@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express'
 const router = express.Router();
-const dataManagementController = require('../controllers/dataManagementController');
+import { clearAllData, clearModelData } from '../controllers/dataManagementController.js'
 
 // Add some basic protection with a confirmation header
 const confirmationMiddleware = (req, res, next) => {
@@ -13,7 +13,7 @@ const confirmationMiddleware = (req, res, next) => {
   next();
 };
 
-router.delete('/all', confirmationMiddleware, dataManagementController.clearAllData);
-router.delete('/:model', confirmationMiddleware, dataManagementController.clearModelData);
+router.delete('/all', confirmationMiddleware, clearAllData);
+router.delete('/:model', confirmationMiddleware, clearModelData);
 
-module.exports = router;
+export { router as dataManagementRoutes};

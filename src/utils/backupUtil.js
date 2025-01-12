@@ -1,17 +1,16 @@
-const fs = require('fs/promises');
-const path = require('path');
-const zlib = require('zlib');
-const { promisify } = require('util');
-const mongoose = require('mongoose');
+import fs from 'fs/promises';
+import path from 'path';
+import zlib from 'zlib';
+import { promisify } from 'util';
+import mongoose from 'mongoose';
+import Character from '../character/domain/Character.js';
+import { Quest } from '../legacy/quests/Quest.js';
+import { Encounter } from '../legacy/encounters/Encounter.js';
+
 const gzip = promisify(zlib.gzip);
 const gunzip = promisify(zlib.gunzip);
 
-// Import your models
-const Character = require('../models/Character');
-const Quest = require('../models/Quest');
-const Encounter = require('../models/Encounter');
-
-exports.createBackup = async () => {
+export const createBackup = async () => {
   try {
     // Fetch all data from your models
     const gameState = {
@@ -47,47 +46,47 @@ exports.createBackup = async () => {
   }
 };
 
-exports.restoreBackup = async (filename) => {
-    try {
-      // Read and decompress backup
-      const backupDir = path.join(__dirname, '../../backups');
-      const compressed = await fs.readFile(path.join(backupDir, filename));
-      const data = JSON.parse((await gunzip(compressed)).toString());
-  
-      // Clear existing data
-      await Promise.all([
-        Character.deleteMany({}),
-        Quest.deleteMany({}),
-        Encounter.deleteMany({})
-      ]);
-  
-      // Restore data if it exists
-      if (data.character) await Character.create(data.character);
-      if (data.quests?.length) await Quest.insertMany(data.quests);
-      if (data.encounters?.length) await Encounter.insertMany(data.encounters);
-  
-      return {
-        timestamp: data.timestamp,
-        stats: {
-          character: data.character ? 1 : 0,
-          quests: data.quests?.length || 0,
-          encounters: data.encounters?.length || 0
-        }
-      };
-    } catch (error) {
-      console.error('Restore failed:', error);
-      throw error;
-    }
-  };
-  
-  // Add list backups function
-  exports.listBackups = async () => {
-    try {
-      const backupDir = path.join(__dirname, '../../backups');
-      const files = await fs.readdir(backupDir);
-      return files.filter(f => f.endsWith('.gz'));
-    } catch (error) {
-      console.error('Failed to list backups:', error);
-      throw error;
-    }
-  };
+export const restoreBackup = async (filename) => {
+  try {
+    // Read and decompress backup
+    const backupDir = path.join(__dirname, '../../backups');
+    const compressed = await fs.readFile(path.join(backupDir, filename));
+    const data = JSON.parse((await gunzip(compressed)).toString());
+
+    // Clear existing data
+    await Promise.all([
+      Character.deleteMany({}),
+      Quest.deleteMany({}),
+      Encounter.deleteMany({})
+    ]);
+
+    // Restore data if it exists
+    if (data.character) await Character.create(data.character);
+    if (data.quests?.length) await Quest.insertMany(data.quests);
+    if (data.encounters?.length) await Encounter.insertMany(data.encounters);
+
+    return {
+      timestamp: data.timestamp,
+      stats: {
+        character: data.character ? 1 : 0,
+        quests: data.quests?.length || 0,
+        encounters: data.encounters?.length || 0
+      }
+    };
+  } catch (error) {
+    console.error('Restore failed:', error);
+    throw error;
+  }
+};
+
+// Add list backups function
+export const listBackups = async () => {
+  try {
+    const backupDir = path.join(__dirname, '../../backups');
+    const files = await fs.readdir(backupDir);
+    return files.filter(f => f.endsWith('.gz'));
+  } catch (error) {
+    console.error('Failed to list backups:', error);
+    throw error;
+  }
+};

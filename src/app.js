@@ -1,26 +1,30 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import { characterRoutes } from './character/api/characterRoutes.js';
 
-const characterRoutes = require('./routes/characterRoutes');
-const encounterRoutes = require('./routes/encounterRoutes');
-const questRoutes = require('./routes/questRoutes');
+// Legacy routes
+import { encounterRoutes } from './legacy/encounters/encounterRoutes.js';
+import { questRoutes } from './legacy/quests/questRoutes.js';
+import { backupRoutes } from './routes/backupRoutes.js';
+import { dataManagementRoutes } from './routes/dataManagementRoutes.js';
 
-const backupRoutes = require('./routes/backupRoutes');
-const dataManagementRoutes = require('./routes/dataManagementRoutes');
-
+dotenv.config()
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI, {
+await mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-app.use('/api/character', characterRoutes);
+// Event-sourced routes
+app.use('/api/v2/character', characterRoutes);
+
+// Legacy routes
 app.use('/api/encounters', encounterRoutes);
 app.use('/api/quests', questRoutes);
 app.use('/api/backup', backupRoutes);
@@ -48,4 +52,4 @@ app.listen(PORT, () => {
   console.log(`MongoDB URI: ${process.env.MONGODB_URI}`);
 });
 
-module.exports = app;
+export { app };
