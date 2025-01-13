@@ -1,4 +1,4 @@
-import { encounterService } from "../../legacy/encounters/encounterService";
+import { encounterService } from "../../legacy/encounters/encounterService.js";
 
 export const getEncounter = async (req, res) => 
 {
@@ -12,3 +12,13 @@ export const getEncounter = async (req, res) =>
         res.status(500).json({ message: error.message });
       }
 };
+
+export const getEncounters = async (req, res) => 
+{
+    try {
+        return await Encounter.find({});
+      } catch (error) {
+        console.error('Error fetching encounters:', error);
+        throw error;
+      }
+}
