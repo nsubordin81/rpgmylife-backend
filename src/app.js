@@ -30,6 +30,8 @@ app.use('/api/quests', questRoutes);
 app.use('/api/backup', backupRoutes);
 app.use('/api/data-management', dataManagementRoutes);
 
+app.use('/api/v2/encounters', encounterRoutes);
+
 app.get('/', (req, res) => {
   res.json({ message: 'RPG My Life API is running' });
 });
