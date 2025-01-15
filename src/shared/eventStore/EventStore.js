@@ -1,57 +1,68 @@
-import { CharacterEvent } from './CharacterEvent.js';
+// TODO - now that this has been altered, I'm guessing it brokes stuff, here his what I've gotta do now: 
+/**
+ *  You are correct about the following:
 
+You need an encounter event type.
+You need to update the switch statement to support that type.
+You need to make updates elsewhere in the code that depends on this to call it with an event type.
+Good luck with your implementation!
+ */
+
+import { CharacterEvent } from './CharacterEvent.js';
 
 class EventStore {
   async saveEvent(event) {
-    const latestVersion = await this.getLatestVersion(event.characterId);
-    event.version = latestVersion + 1;
-    
-    const newEvent = new CharacterEvent(event);
+    const EventModel = this.getEventModel(event.type);
 
-    try 
-    {
+    const latestVersion = await this.getLatestVersion(event.aggregateId, EventModel);
+    event.version = latestVersion + 1;
+
+    const newEvent = new EventModel(event);
+
+    try {
       await newEvent.save();
       return newEvent;
-    } catch (error)
-    {
-      if (error.code === 11000) 
-      {
-        // I guess we cknow this can happen we accidentally create a duplicate identifier
-        throw new ConcurrencyError('Event version conflict')
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConcurrencyError('Event version conflict');
       }
     }
-
   }
 
   async find(criteria) {
-    // Find events matching the given criteria (e.g., { type: 'CHARACTER_CREATED' })
-    return CharacterEvent.find(criteria)
+    const EventModel = this.getEventModel(criteria.type);
+    return EventModel.find(criteria)
       .sort({ version: 1 })
       .lean();
   }
 
-  async getEvents(characterId) {
-    // get all events for character in ascending order
-    return CharacterEvent.find({ characterId })
-       // this is how we get ascending events
+  async getEvents(aggregateId, type) {
+    const EventModel = this.getEventModel(type);
+    return EventModel.find({ aggregateId })
       .sort({ version: 1 })
-      // this is something from mongo that says "don't hydrate the object" in other words, give back a plain javascript object
       .lean();
   }
 
-  async getLatestVersion(characterId) {
-    // getting the most recent event document by querying the events in descending order
-    // I don't really understand this syntax
-    const latestEvent = await CharacterEvent.findOne(
-        // filter to only this character out of all character events
-      { characterId },
-      // projection just give me the version field back
+  async getLatestVersion(aggregateId, EventModel) {
+    const latestEvent = await EventModel.findOne(
+      // this is fancy and mysterious syntax let me break it down. we are finding on the character id (-object projection going on here to define that)
+      { aggregateId },
+      // using object projection once again to specify that we want to return just the version field instead of the whole Event object
       { version: 1 },
-      // sort them in descending order
+      // and finally we are using object literal here to specify that we want to sort by version key in descending order
       { sort: { version: -1 } }
     );
-    // null coalesce so if the latestEvent is not null you give its version property otherwise return 0
     return latestEvent?.version || 0;
+  }
+
+  getEventModel(type) {
+    switch (type) {
+      case 'CHARACTER_EVENT':
+        return CharacterEvent;
+      // Add other event models here as needed
+      default:
+        throw new Error(`Unknown event type: ${type}`);
+    }
   }
 }
 
