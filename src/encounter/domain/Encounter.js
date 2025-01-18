@@ -1,10 +1,14 @@
+import { ENCOUNTER_EVENTS } from "../events/encounterEvents";
+
 export default class Encounter extends Aggregate {
     constructor(id = uuidv4()) {
+        super(id);
         this.id = id;
         this.experience = 0;
         this.gold = 0;
         this.loot = [];
         this.completed = false;
+        this.completedBy = null;  // Add this field
     }
 
     static create(encounterData) {
@@ -20,8 +24,13 @@ export default class Encounter extends Aggregate {
     }
 
     complete(characterId) {
+        if (this.completed) {
+            throw new Error('Encounter already completed');
+        }
+
         this.addEvent(ENCOUNTER_EVENTS.ENCOUNTER_COMPLETED, {
-            id: this.id
+            id: this.id,
+            characterId: characterId  // Include characterId in the event
         });
         
         // Emit existing character events for rewards
@@ -54,6 +63,7 @@ export default class Encounter extends Aggregate {
                 break;
             case ENCOUNTER_EVENTS.ENCOUNTER_COMPLETED:
                 this.completed = true;
+                this.completedBy = event.payload.characterId;
                 break;
         }
     }
