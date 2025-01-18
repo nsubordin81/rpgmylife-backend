@@ -22,3 +22,23 @@ export const getEncounters = async (req, res) =>
         throw error;
       }
 }
+
+export const createEncounter = async (req, res) =>
+{
+    try {
+        const encounter = await encounterService.createEncounter(req.body);
+        res.status(201).json(encounter);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+}
+
+export const completeEncounter = async (req, res) =>
+{
+    try {
+        const encounter = await encounterService.completeEncounter(req.params.id, req.body.characterId);
+        res.json(encounter);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+}
