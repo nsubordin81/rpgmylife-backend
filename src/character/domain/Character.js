@@ -129,12 +129,10 @@ export default class Character extends Aggregate {
 
   // Static method to rebuild character from events
   static async load(characterId) {
-    // we know from writing the event store class how this works, go get all of the events in chronological order for this character object
-    const events = await eventStore.getEvents(characterId);
+    const events = await eventStore.getEvents(characterId, EVENT_TYPES.CHARACTER);
     console.log(`attempting to load character with id ${characterId}`);
-    console.log(`number of character events for character ${characterId}, ${events.length}`);
     if (events.length === 0) {
-      throw new Error('NotFoundError: Character not found');
+        throw new Error('NotFoundError: Character not found');
     }
     const character = new Character(characterId);
     character.applyEvents(events);

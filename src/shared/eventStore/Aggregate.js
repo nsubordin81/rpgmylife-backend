@@ -23,9 +23,11 @@ export default class Aggregate {
     // Add a new event to uncommitted changes
     // I guess you can have a backlog of events to save
     addEvent(type, payload) {
+      const baseType = type.split('.')[0];
       const event = {
-        characterId: this.id,
+        aggregateId: this.id,
         type,
+        baseType,
         payload,
         timestamp: new Date(),
         version: this.version + 1
@@ -40,4 +42,3 @@ export default class Aggregate {
       this.changes = [];
     }
   }
-  

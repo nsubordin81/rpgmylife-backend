@@ -10,6 +10,7 @@ Good luck with your implementation!
 
 import { CharacterEvent } from './CharacterEvent.js';
 import { EncounterEvent } from './EncounterEvent.js';
+import { EVENT_TYPES } from '../events/eventTypes.js';
 import { ConcurrencyError } from '../../infrastructure/errors/ConcurrencyError.js';
 
 class EventStore {
@@ -39,6 +40,9 @@ class EventStore {
   }
 
   async getEvents(aggregateId, type) {
+    if (!type) {
+      throw new Error('Event type is required for getEvents');
+    }
     const EventModel = this.getEventModel(type);
     return EventModel.find({ aggregateId })
       .sort({ version: 1 })
@@ -59,11 +63,10 @@ class EventStore {
 
   getEventModel(type) {
     switch (type) {
-      case 'CHARACTER_EVENT':
+      case EVENT_TYPES.CHARACTER:
         return CharacterEvent;
-      case 'ENCOUNTER_EVENT':
+      case EVENT_TYPES.ENCOUNTER:
         return EncounterEvent;
-      // Add other event models here as needed
       default:
         throw new Error(`Unknown event type: ${type}`);
     }
