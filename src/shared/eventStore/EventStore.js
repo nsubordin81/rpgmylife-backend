@@ -29,6 +29,7 @@ class EventStore {
       if (error.code === 11000) {
         throw new ConcurrencyError('Event version conflict');
       }
+      throw new Error(`Failed to save event: ${error.message}\n${error.stack}`);
     }
   }
 
@@ -62,7 +63,8 @@ class EventStore {
   }
 
   getEventModel(type) {
-    switch (type) {
+    const [eventType] = type.split('.');
+    switch (eventType) {
       case EVENT_TYPES.CHARACTER:
         return CharacterEvent;
       case EVENT_TYPES.ENCOUNTER:
