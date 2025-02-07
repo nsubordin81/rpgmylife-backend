@@ -90,7 +90,7 @@ class CharacterService {
     console.log(`this is the character creation event ${JSON.stringify(createEvent, null, 2)}`);
     
     // Use the characterId from the creation event to load the full character
-    return this.getCharacter(createEvent.characterId);
+    return this.getCharacter(createEvent.aggregateId);
   }
 }
 
