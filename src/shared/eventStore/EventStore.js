@@ -12,6 +12,7 @@ import { CharacterEvent } from './CharacterEvent.js';
 import { EncounterEvent } from './EncounterEvent.js';
 import { EVENT_TYPES } from '../events/eventTypes.js';
 import { ConcurrencyError } from '../../infrastructure/errors/ConcurrencyError.js';
+import Quest from '../../quest/domain/Quest.js';
 
 class EventStore {
   async saveEvent(event) {
@@ -69,6 +70,8 @@ class EventStore {
         return CharacterEvent;
       case EVENT_TYPES.ENCOUNTER:
         return EncounterEvent;
+      case EVENT_TYPES.QUEST:
+        return QuestEvent;
       default:
         throw new Error(`Unknown event type: ${type}`);
     }
