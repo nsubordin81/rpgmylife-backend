@@ -10,6 +10,7 @@ Good luck with your implementation!
 
 import { CharacterEvent } from './CharacterEvent.js';
 import { EncounterEvent } from './EncounterEvent.js';
+import { QuestEvent } from './QuestEvent.js';
 import { EVENT_TYPES } from '../events/eventTypes.js';
 import { ConcurrencyError } from '../../infrastructure/errors/ConcurrencyError.js';
 import Quest from '../../quest/domain/Quest.js';
