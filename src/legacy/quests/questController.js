@@ -22,7 +22,11 @@ export const questController = {
 
   completeQuest: async (req, res) => {
     try {
-      const quest = await questService.completeQuest(req.params.id);
+      const { characterId } = req.body; // Get characterId from request body
+      if (!characterId) {
+        return res.status(400).json({ message: 'Character ID is required' });
+      }
+      const quest = await questService.completeQuest(req.params.id, characterId);
       res.json(quest);
     } catch (error) {
       res.status(404).json({ message: error.message });

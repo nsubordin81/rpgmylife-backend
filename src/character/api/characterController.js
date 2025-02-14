@@ -128,8 +128,10 @@ export const getLevelInfo = async (req, res) => {
 
 export const acquireLoot = async (req, res) => {
   try {
-    const { characterId, loot } = req.body;
-    console.log(`characterid: ${characterId}, loot: ${loot}`)
+    const characterId = req.params.id; // Get from URL params instead of body
+    const { loot } = req.body;
+    
+    console.log(`characterid: ${characterId}, loot: ${JSON.stringify(loot)}`)
     if (!loot || !loot.type) {
       return res.status(400).json({ error: 'you must provide a loot item and it must have a type field' });
     }

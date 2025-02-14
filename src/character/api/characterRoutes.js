@@ -5,7 +5,7 @@
 // good concurrency as well as supporting the restful request as an incoming http request. 
 
 import express from 'express';
-import { createCharacter, getCharacter, gainExperience, gainGold, spendGold, getLevelInfo } from './characterController.js';
+import { createCharacter, getCharacter, gainExperience, gainGold, spendGold, getLevelInfo, acquireLoot } from './characterController.js';
 
 const router = express.Router();
 
@@ -18,5 +18,6 @@ router.get('/:id', getCharacter);
 router.post('/:id/experience', gainExperience);
 router.post('/:id/gold', gainGold);
 router.post('/:id/spend', spendGold);
+router.post('/:id/loot', acquireLoot);
 
 export { router as characterRoutes };
