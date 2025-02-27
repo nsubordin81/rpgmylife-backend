@@ -11,20 +11,27 @@ class LevelSystem {
       for (let i = 1; i <= maxLevel; i++) {
         table[i] = this.experienceFormula(i);
       }
+      console.log(`value at index 0 of experience table is ${table[0]}`);
       return table;
     }
   
     calculateLevel(totalExperience) {
-      let level = 0;
+      let level = 1;
       while (level < this.experienceTable.length && 
              totalExperience >= this.experienceTable[level]) {
         level++;
       }
-      return level - 1;
+      return level;
     }
   
     getRequiredExperience(level) {
-      return this.experienceTable[level] || this.experienceFormula(level);
+      let requiredExp = this.experienceTable[level];
+      if (requiredExp === 'undefined') {
+        requiredExp = this.experienceFormula(level);
+      }
+      // console.log(`the first 10 elements of experience table are ${this.experienceTable.slice(0, 10)}`);
+      console.log(`Level ${level} requires ${requiredExp} experience.`);
+      return requiredExp;
     }
   
     getExperienceForNextLevel(currentLevel) {

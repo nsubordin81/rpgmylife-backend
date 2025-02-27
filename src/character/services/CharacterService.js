@@ -49,15 +49,19 @@ class CharacterService {
 
   async getLevelInfo(characterId) {
     const character = await this.getCharacter(characterId);
-    const nextLevelExp = levelSystem.getExperienceForNextLevel(character.level);
-    const expToGetToCurrentLevel = levelSystem.getRequiredExperience(character.level);
-
+    const currentLevel = character.level;
+    const currentExp = character.totalExperience;
+    
+    // Get experience thresholds
+    const currentLevelExp = levelSystem.getRequiredExperience(currentLevel - 1); // Experience needed for previous level
+    const nextLevelExp = levelSystem.getRequiredExperience(currentLevel);        // Experience needed for current level
+    
     return {
-      currentLevel: character.level,
-      currentExp: character.totalExperience,
-      nextLevelExp,
-      expToGetToCurrentLevel,
-      expToNextLevel: nextLevelExp - character.totalExperience
+      currentLevel: currentLevel,
+      currentExp: currentExp,
+      nextLevelExp: nextLevelExp,
+      expToGetToCurrentLevel: currentLevelExp,
+      expToNextLevel: nextLevelExp - currentExp
     };
   }
 
