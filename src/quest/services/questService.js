@@ -1,4 +1,4 @@
-import { Quest } from './Quest.js';
+import { Quest } from '../../legacy/quests/Quest.js';
 import { characterService } from '../../character/services/CharacterService.js';
 
 class QuestService {

@@ -9,6 +9,7 @@ import { encounterRoutes } from './legacy/encounters/encounterRoutes.js';
 import { questRoutes } from './legacy/quests/questRoutes.js';
 import { backupRoutes } from './routes/backupRoutes.js';
 import { dataManagementRoutes } from './routes/dataManagementRoutes.js';
+import { storeRoutes } from './routes/storeRoutes.js';
 
 dotenv.config()
 const app = express();
@@ -29,6 +30,7 @@ app.use('/api/encounters', encounterRoutes);
 app.use('/api/quests', questRoutes);
 app.use('/api/backup', backupRoutes);
 app.use('/api/data-management', dataManagementRoutes);
+app.use('/api/store', storeRoutes);
 
 app.use('/api/v2/encounters', encounterRoutes);
 
