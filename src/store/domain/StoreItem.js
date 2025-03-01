@@ -1,4 +1,4 @@
-import {mongoose} from 'mongoose.js';
+import { mongoose } from 'mongoose';
 
 const StoreItemSchema = new mongoose.Schema({
     name: { type: String, required: true },

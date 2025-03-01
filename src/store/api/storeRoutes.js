@@ -1,5 +1,5 @@
 import express from 'express';
-import { getStoreItems, createStoreItem} from './storeController';
+import { getStoreItems, createStoreItem} from './storeController.js';
 
 
 const router = express.Router();
@@ -13,3 +13,5 @@ router.get('/', getStoreItems);
 
 // I need a route for adding store items
 router.put('/', createStoreItem);
+
+export { router as storeRoutes }

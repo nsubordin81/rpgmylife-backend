@@ -6,10 +6,10 @@ import { characterRoutes } from './character/api/characterRoutes.js';
 
 // Legacy routes
 import { encounterRoutes } from './legacy/encounters/encounterRoutes.js';
-import { questRoutes } from './legacy/quests/questRoutes.js';
+import { questRoutes } from './quest/api/questRoutes.js';
 import { backupRoutes } from './routes/backupRoutes.js';
 import { dataManagementRoutes } from './routes/dataManagementRoutes.js';
-import { storeRoutes } from './routes/storeRoutes.js';
+import { storeRoutes } from './store/api/storeRoutes.js';
 
 dotenv.config()
 const app = express();

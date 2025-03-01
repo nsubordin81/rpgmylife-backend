@@ -1,6 +1,7 @@
 import express from 'express'; 
-const router = express.Router();
 import { getQuests, createQuest, completeQuest, getQuest } from './questController.js'
+
+const router = express.Router();
 
 router.get('/', getQuests);
 router.post('/', createQuest);

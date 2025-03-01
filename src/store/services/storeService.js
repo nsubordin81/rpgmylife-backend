@@ -1,4 +1,4 @@
-import {StoreItem} from './StoreItem.js';
+import {StoreItem} from '../domain/StoreItem.js';
 
 class StoreService {
 
