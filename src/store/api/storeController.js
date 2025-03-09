@@ -2,7 +2,9 @@ import {storeService} from '../services/storeService.js';
 
 export const getStoreItems = async (req, res) => {
     try {
+        console.log("getting store items");
         const items = await storeService.getStoreItems();
+        console.log("store items: ", items);
         res.json(items)
     } catch (error) {
         res.status(500).json({message: error.message});

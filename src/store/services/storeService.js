@@ -2,8 +2,10 @@ import {StoreItem} from '../domain/StoreItem.js';
 
 class StoreService {
 
-    static async getStoreItems() {
-        return await StoreItem.find();
+    getStoreItems = async () => {
+        const storeItem = await StoreItem.find();
+        console.log("store items: ", storeItem);
+        return storeItem;
     }
 }
 
