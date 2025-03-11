@@ -17,6 +17,7 @@ export const createStoreItem = async (req, res) => {
         return res.status(400).json({message: 'Name and price are required'});
     }
     try {
+        console.log('Creating store item with data:', req.body); // Add this logging
         const item = await storeService.createStoreItem(req.body);
         res.status(201).json(item);
     } catch (error) {

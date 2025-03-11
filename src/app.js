@@ -30,7 +30,7 @@ app.use('/api/encounters', encounterRoutes);
 app.use('/api/quests', questRoutes);
 app.use('/api/backup', backupRoutes);
 app.use('/api/data-management', dataManagementRoutes);
-app.use('/api/store', storeRoutes);
+app.use('/api/storeItems', storeRoutes);
 
 app.use('/api/v2/encounters', encounterRoutes);
 
