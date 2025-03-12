@@ -7,6 +7,12 @@ class StoreService {
         console.log("store items: ", storeItem);
         return storeItem;
     }
+
+    createStoreItem = async (data) => {
+        const storeItem = new StoreItem(data);
+        await storeItem.save();
+        return storeItem;
+    }
 }
 
 export const storeService = new StoreService();
