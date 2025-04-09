@@ -1,17 +1,20 @@
-import express from 'express';
-import { getStoreItems, createStoreItem} from './storeController.js';
+import express from "express"
+import {
+  getStoreItems,
+  createStoreItem,
+  purchaseStoreItem,
+} from "./storeController.js"
 
-
-const router = express.Router();
+const router = express.Router()
 
 // I need a route for getting store items
-router.get('/', getStoreItems);
+router.get("/", getStoreItems)
 
 // I need a route for purchasing store items
-
+router.put("/purchase", purchaseStoreItem)
 // I need a route for removing store items
 
 // I need a route for adding store items
-router.put('/', createStoreItem);
+router.post("/", createStoreItem)
 
 export { router as storeRoutes }
