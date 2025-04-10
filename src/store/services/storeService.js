@@ -27,11 +27,12 @@ class StoreService {
     }
 
     console.log(`the character to load has id: ${characterId}`)
-    const character = Character.load(characterId)
+    const character = await Character.load(characterId)
     console.log(
       `deducting ${updateResult.price} gold from ${character.name}'s purse`
     )
     character.gainGold(-updateResult.price)
+    character.save()
   }
 }
 
