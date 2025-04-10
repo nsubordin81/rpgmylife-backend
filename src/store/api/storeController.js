@@ -31,7 +31,7 @@ export const purchaseStoreItem = async (req, res) => {
     return res.status(400).json({ message: "item id is required" })
   }
   try {
-    console.log(`processing purchase of item ${itemId}`)
+    console.log(`processing purchase of item ${req.body.itemId}`)
     const item = storeService.updateStoreItem(req.body.itemId)
   } catch (error) {
     res.status(500).json({ message: error.message })

@@ -14,12 +14,11 @@ class StoreService {
   }
 
   updateStoreItem = async (itemId) => {
-    const resultItem = await StoreItem.find((val) => val === itemId)
+    const resultItem = await StoreItem.find({ _id: itemId })
     if (resultItem === undefined) {
       throw new Error("the item to purchase was not found.")
     } else {
-      resultItem.purchased = true
-      resultItem.save()
+      resultItem.update({ _id: itemId }, { $set: { purchased: true } })
     }
   }
 }
