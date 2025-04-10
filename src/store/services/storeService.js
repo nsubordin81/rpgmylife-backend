@@ -1,25 +1,37 @@
-import { StoreItem } from "../domain/StoreItem.js"
+import { storeitems } from "../domain/StoreItem.js"
+import Character from "../../character/domain/Character.js"
 
 class StoreService {
   getStoreItems = async () => {
-    const storeItem = await StoreItem.find()
+    const storeItem = await storeitems.find()
     console.log("store items: ", storeItem)
     return storeItem
   }
 
   createStoreItem = async (data) => {
-    const storeItem = new StoreItem(data)
+    const storeItem = new storeitems(data)
     await storeItem.save()
     return storeItem
   }
 
-  updateStoreItem = async (itemId) => {
-    const resultItem = await StoreItem.find({ _id: itemId })
-    if (resultItem === undefined) {
+  updateStoreItem = async (itemId, characterId) => {
+    const updateResult = await storeitems.findOneAndUpdate(
+      { _id: itemId },
+      { $set: { purchased: true } }
+    )
+
+    console.log(`here is the result for ya: ${updateResult}`)
+
+    if (!updateResult) {
       throw new Error("the item to purchase was not found.")
-    } else {
-      resultItem.update({ _id: itemId }, { $set: { purchased: true } })
     }
+
+    console.log(`the character to load has id: ${characterId}`)
+    const character = Character.load(characterId)
+    console.log(
+      `deducting ${updateResult.price} gold from ${character.name}'s purse`
+    )
+    character.gainGold(-updateResult.price)
   }
 }
 

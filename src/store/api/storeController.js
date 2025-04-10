@@ -32,7 +32,10 @@ export const purchaseStoreItem = async (req, res) => {
   }
   try {
     console.log(`processing purchase of item ${req.body.itemId}`)
-    const item = storeService.updateStoreItem(req.body.itemId)
+    const item = storeService.updateStoreItem(
+      req.body.itemId,
+      req.body.characterId
+    )
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
