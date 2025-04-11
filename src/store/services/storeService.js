@@ -15,24 +15,36 @@ class StoreService {
   }
 
   updateStoreItem = async (itemId, characterId) => {
-    const updateResult = await storeitems.findOneAndUpdate(
-      { _id: itemId },
-      { $set: { purchased: true } }
-    )
+    try {
+      // Run both operations in parallel
+      const [updateResult, character] = await Promise.all([
+        storeitems.findOneAndUpdate(
+          { _id: itemId },
+          { $set: { purchased: true } },
+          {
+            new: true, // Return updated document
+            lean: true, // Return plain JS object for better performance
+          }
+        ),
+        Character.load(characterId),
+      ])
 
-    console.log(`here is the result for ya: ${updateResult}`)
+      if (!updateResult) {
+        throw new Error("The item to purchase was not found.")
+      }
 
-    if (!updateResult) {
-      throw new Error("the item to purchase was not found.")
+      character.gainGold(-updateResult.price)
+      await character.save()
+
+      // Return both updated entities to avoid additional queries
+      return {
+        item: updateResult,
+        character: character,
+      }
+    } catch (error) {
+      console.error("Error in updateStoreItem:", error)
+      throw error
     }
-
-    console.log(`the character to load has id: ${characterId}`)
-    const character = await Character.load(characterId)
-    console.log(
-      `deducting ${updateResult.price} gold from ${character.name}'s purse`
-    )
-    character.gainGold(-updateResult.price)
-    character.save()
   }
 }
 
